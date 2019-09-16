@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SPDisp"
+             mc:Ignorable="d"
+             x:Class="SPDisp.View1">
+  <ContentView.BindingContext>
+    <local:DispString/>
+  </ContentView.BindingContext>
+  <ContentView.Content>
+    <Grid BackgroundColor="Beige">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="480"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="640"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="White">
+        <Label Text="{Binding SpeedStr}" TextColor="White" BackgroundColor="Black" FontSize="64" HorizontalOptions="Center" VerticalOptions="Center"/>
+      </Grid>
+      </Grid>
+  </ContentView.Content>
+</ContentView>

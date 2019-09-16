@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:TR.BIDSDispX"
+             mc:Ignorable="d"
+             x:Class="TR.BIDSDispX.CATSDisp">
+  <ContentView.BindingContext>
+    <local:DispString/>
+  </ContentView.BindingContext>
+
+  <Grid HeightRequest="1280" WidthRequest="800" BackgroundColor="Black" HorizontalOptions="Center" VerticalOptions="Center">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="60"/>
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Label Text="{Binding UpperStr}" TextColor="{Binding UpperColor}" Grid.Row="0" FontSize="{Binding FontSizeU}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+      <Label Text="{Binding CenterStr}" TextColor="{Binding CenterColor}" Grid.Row="1" FontSize="{Binding FontSizeC}" HorizontalOptions="Center" VerticalOptions="Center"/>
+      <Grid Grid.Row="2" BackgroundColor="{Binding LowerBGBGColor}"/>
+      <Label Text="{Binding LowerStr}" TextColor="{Binding LowerColor}" Grid.Row="2" FontSize="{Binding FontSizeL}" HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
+    <Grid Grid.Row="0" BackgroundColor="Black" Opacity="{Binding Brightness}"/>
+    
+    <StackLayout Margin="10" Grid.Row="0" BackgroundColor="#AAFFFFFF" IsVisible="{Binding SettingVisib}">
+      <Label Text="FontSize" FontSize="32" TextColor="Black"/>
+      <StackLayout Orientation="Horizontal">
+        <Button Margin="10,80,0,0" Clicked="FSUMinus" Text="(-)"/>
+        <Label Margin="10,80,10,0" Text="{Binding FontSizeU}" FontSize="32" TextColor="Black"/>
+        <Button Margin="0,80,10,0" Clicked="FSUPlus" Text="(+)"/>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Button Margin="10,80,0,0" Clicked="FSCMinus" Text="(-)"/>
+        <Label Margin="10,80,10,0" Text="{Binding FontSizeC}" FontSize="32" TextColor="Black"/>
+        <Button Margin="0,80,10,0" Clicked="FSCPlus" Text="(+)"/>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Button Margin="10,80,0,0" Clicked="FSLMinus" Text="(-)"/>
+        <Label Margin="10,80,10,0" Text="{Binding FontSizeL}" FontSize="32" TextColor="Black"/>
+        <Button Margin="0,80,10,0" Clicked="FSLPlus" Text="(+)"/>
+      </StackLayout>
+      <Label Text="Plugin Type" FontSize="32" TextColor="Black"/>
+      <ListView SelectedItem="{Binding PIType}" ItemsSource="{Binding PITypes}"/>
+    </StackLayout>
+    <Button Text="Back" Clicked="goBack" Grid.Row="1" HorizontalOptions="StartAndExpand"/>
+    <Button Text="Bright" Clicked="ChangeBright" Grid.Row="1" HorizontalOptions="CenterAndExpand"/>
+    <Button Text="Setting" Clicked="goSetting" Grid.Row="1" HorizontalOptions="EndAndExpand"/>
+  </Grid>
+</ContentView>
