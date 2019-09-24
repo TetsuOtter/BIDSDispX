@@ -16,7 +16,6 @@ namespace TR.BIDSDispX
       communication cm = new communication();
       cm.Connect(string.Empty);
       Common.Add(ref cm);
-
       DispCom.ViewChanged += MainPage_PageChange;
 
       DispCom.CurrentView = new StartPage();
@@ -25,10 +24,16 @@ namespace TR.BIDSDispX
     private void MainPage_PageChange(object sender, EventArgs e) => Content = (View)sender ?? new StartPage();
     
 
+
     ~MainPage(){
       DispCom.CurrentView?.OnUnloaded();
       Common.Dispose();
     }
 
+    protected override void OnDisappearing()
+    {
+      Common.Dispose();
+      base.OnDisappearing();
+    }
   }
 }

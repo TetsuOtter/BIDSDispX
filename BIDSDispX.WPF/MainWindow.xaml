@@ -1,0 +1,16 @@
+﻿<wpf:FormsApplicationPage x:Class="TR.BIDSDispX.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wpf="clr-namespace:Xamarin.Forms.Platform.WPF;assembly=Xamarin.Forms.Platform.WPF"
+                          xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xamarin.Forms.Platform.WPF"
+                          Closed="FormsApplicationPage_Closed"
+        Title="BIDSDispX"
+                          BorderThickness="0"
+                          WindowState="Maximized"
+                          WindowStyle="None">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="0" UseAeroCaptionButtons="True"
+                      GlassFrameThickness="0" IgnoreTaskbarOnMaximize="True"
+                      CornerRadius="0" ResizeBorderThickness="0"/>
+  </shell:WindowChrome.WindowChrome>
+</wpf:FormsApplicationPage>

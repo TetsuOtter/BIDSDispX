@@ -10,7 +10,7 @@
     <local:SetValue/>
   </ContentView.BindingContext>
 
-  <Grid>
+  <Grid Margin="1">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
       <RowDefinition Height="40"/>
@@ -28,9 +28,10 @@
       <ScrollView>
         <ListView ItemsSource="{Binding Dlls}" ItemTemplate="{Binding Dlls}" SelectedItem="{Binding SelectedDll}"/>
       </ScrollView>
-      <StackLayout Orientation="Horizontal" HeightRequest="40" HorizontalOptions="End">
-        <Button Text="Reflesh" Clicked="Liblist_Reflesh"/>
-        <Button Text="Add Local LIB" Clicked="Add_Local_Lib"/>
+      <StackLayout Orientation="Horizontal" HeightRequest="40">
+        <Button Text="App Exit" Clicked="AppExitEv" HorizontalOptions="Start"/>
+        <Button Text="Reflesh" Clicked="Liblist_Reflesh" HorizontalOptions="End"/>
+        <Button Text="Add Local LIB" Clicked="Add_Local_Lib" HorizontalOptions="End"/>
       </StackLayout>
       <Button Text="Load Selected Library" Clicked="LoadLib"/>
     </StackLayout>

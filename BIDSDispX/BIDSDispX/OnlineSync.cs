@@ -13,6 +13,7 @@ namespace TR.BIDSDispX
   {
     private readonly string ModsListFName = "ModsList.csv";
     private readonly string ModsListURLsFName = "ModsListURLs.txt";
+    public readonly string ModsFolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "BIDSDispX", "mods");
 
     internal void UpdateLists(string[] urls)
     {
@@ -140,9 +141,8 @@ namespace TR.BIDSDispX
       try
       {
         string fpath = string.Empty;
-        //fpath = System.Web.HttpUtility.UrlDecode(file.FilePath);
         fpath = file.FilePath;
-        string TargetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), file.FileName);
+        string TargetPath = Path.Combine(ModsFolderName, file.FileName);
         File.Copy(fpath, TargetPath, true);
 
         AddMod(new ModsListStructure() { LocalPath = TargetPath, LocalUpdateTime = 0, ModName = file.FileName });
@@ -159,7 +159,19 @@ namespace TR.BIDSDispX
       FileWrite(ModsListFName, ModsList2ByteArr(mlsl));
     }
 
-    private FileStream OpenFile(string fname) => File.Open(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fname), FileMode.OpenOrCreate);
+    private FileStream OpenFile(string fname)
+    {
+      try
+      {
+        return File.Open(Path.Combine(ModsFolderName, fname), FileMode.OpenOrCreate);
+      }
+      catch (DirectoryNotFoundException)
+      {
+        Directory.CreateDirectory(ModsFolderName);
+        return OpenFile(fname);
+      }
+      catch (Exception) { throw; }
+    }
 
 
     internal void GetModsListURLs(out string[] sa) => sa = GetModsListURLs();

@@ -34,7 +34,7 @@ namespace TR.BIDSDispX
 
     private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new CATSDisp();
 
-    private string FDPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    private string FDPath => OSync.ModsFolderName;
 
     public ContentView FirstView => this;
 
@@ -96,6 +96,8 @@ namespace TR.BIDSDispX
     public void OnOpenDChanged(object sender, SMemLib.OpenDChangedEArgs e) { }
 
     public void OnUnloaded() { }
+
+    private void AppExitEv(object sender, EventArgs e) => DispCom.AppExit();
   }
 
   internal class SetValue : INotifyPropertyChanged

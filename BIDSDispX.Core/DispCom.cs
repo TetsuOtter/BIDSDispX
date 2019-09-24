@@ -37,5 +37,12 @@ namespace TR.BIDSDispX.Core
 
     public static event EventHandler ViewChanged;
     public static void ViewChange(View v = null) => ViewChanged?.Invoke(v, null);
+
+    public static void AppExit()
+    {
+      Common.Remove();
+      Common.Dispose();
+      System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+    }
   }
 }
