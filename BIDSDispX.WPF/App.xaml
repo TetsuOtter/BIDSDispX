@@ -7,7 +7,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WPFLightToolkit;component/Assets/Default.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <SolidColorBrush x:Key="AccentColor" Color="#303F9F" />
+      <SolidColorBrush x:Key="AccentColor" Color="Transparent" />
     </ResourceDictionary>
   </Application.Resources>
 </Application>

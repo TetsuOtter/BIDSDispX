@@ -10,7 +10,7 @@
     <local:DispString/>
   </ContentView.BindingContext>
 
-  <Grid HeightRequest="1280" WidthRequest="800" BackgroundColor="Black" HorizontalOptions="Center" VerticalOptions="Center">
+  <Grid x:Name="MainGrid" HeightRequest="1280" WidthRequest="800" BackgroundColor="Black" HorizontalOptions="Center" VerticalOptions="Center">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
       <RowDefinition Height="60"/>

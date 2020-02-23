@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>TR.drivesup</AssemblyName>
+    <RootNamespace>TR.drivesup</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,16 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BIDSSMemLib\BIDSSMemLib.rw\BIDSSMemLib.rw.csproj" />
     <ProjectReference Include="..\..\BIDSSMemLib\BIDSSMemLib.structs\BIDSSMemLib.structs.csproj" />
+    <ProjectReference Include="..\..\BIDS_Server\BIDSsv\BIDSsv.csproj" />
     <ProjectReference Include="..\BIDSDispX.Core\BIDSDispX.Core.csproj" />
     <ProjectReference Include="..\IBIDSDispX\IBIDSDispX.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="View1.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

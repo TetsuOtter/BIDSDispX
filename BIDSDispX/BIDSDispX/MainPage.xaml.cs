@@ -12,6 +12,8 @@ namespace TR.BIDSDispX
     public MainPage()
     {
       InitializeComponent();
+      NavigationPage.SetHasNavigationBar(this, false);
+      NavigationPage.SetTitleView(this, null);
       Common.Start(5);
       communication cm = new communication();
       cm.Connect(string.Empty);

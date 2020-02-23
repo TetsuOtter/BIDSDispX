@@ -5,12 +5,18 @@
                           xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xamarin.Forms.Platform.WPF"
                           Closed="FormsApplicationPage_Closed"
         Title="BIDSDispX"
+                          Padding="0"
+                          Margin="0"
                           BorderThickness="0"
                           WindowState="Maximized"
                           WindowStyle="None">
   <shell:WindowChrome.WindowChrome>
-    <shell:WindowChrome CaptionHeight="0" UseAeroCaptionButtons="True"
-                      GlassFrameThickness="0" IgnoreTaskbarOnMaximize="True"
-                      CornerRadius="0" ResizeBorderThickness="0"/>
+    <shell:WindowChrome CaptionHeight="0"
+                        UseAeroCaptionButtons="False"
+                        UseNoneWindowStyle="True"
+                      GlassFrameThickness="0"
+                        IgnoreTaskbarOnMaximize="True"
+                      CornerRadius="0"
+                        ResizeBorderThickness="0"/>
   </shell:WindowChrome.WindowChrome>
 </wpf:FormsApplicationPage>

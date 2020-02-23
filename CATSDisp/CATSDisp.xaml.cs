@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using TR.BIDSDispX.Core;
 using TR.BIDSSMemLib;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -16,8 +18,8 @@ namespace TR.BIDSDispX
     private readonly Color ColG = Color.FromRgb(0x00, 0xFF, 0x00);
     private readonly Color ColB = Color.FromRgb(0x00, 0x00, 0xFF);
     private readonly Color ColW = Color.FromRgb(0xFF, 0xFF, 0xFF);
-
-    public ContentView FirstView => this;
+    SizeSelector SL = new SizeSelector();
+    public ContentView FirstView => SL;
 
     public CATSDisp()
     {
@@ -25,6 +27,14 @@ namespace TR.BIDSDispX
       ds = new DispString();
       ds.PIType = ds.PITypes[0];
       BindingContext = ds;
+      List<Size> slist = new List<Size>();
+      slist.Add(new Size(10, 20));
+      slist.Add(new Size(20, 20));
+      slist.Add(new Size(30, 20));
+      slist.Add(new Size(40, 20));
+      slist.Add(new Size(50, 20));
+      SL.SizesSet(slist, 2);
+      SL.SizeDecided += (s, e) => { DispCom.ViewChange(this); };
     }
 
     public void OnPanelDChanged(object sender, SMemLib.ArrayDChangedEArgs e)
@@ -236,7 +246,7 @@ namespace TR.BIDSDispX
       }
     }
 
-    private void goBack(object sender, EventArgs e) => TR.BIDSDispX.Core.DispCom.ViewChange();
+    private void goBack(object sender, EventArgs e) => DispCom.ViewChange();
     
 
     private void ChangeBright(object sender, EventArgs e)
