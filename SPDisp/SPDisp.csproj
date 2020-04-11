@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BIDSSMemLib\BIDSSMemLib.rw\BIDSSMemLib.rw.csproj" />
     <ProjectReference Include="..\..\BIDSSMemLib\BIDSSMemLib.structs\BIDSSMemLib.structs.csproj" />
+    <ProjectReference Include="..\..\IAtsPI\IAtsPI.csproj" />
     <ProjectReference Include="..\BIDSDispX.Core\BIDSDispX.Core.csproj" />
     <ProjectReference Include="..\IBIDSDispX\IBIDSDispX.csproj" />
   </ItemGroup>

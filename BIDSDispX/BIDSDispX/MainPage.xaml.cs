@@ -14,8 +14,9 @@ namespace TR.BIDSDispX
       InitializeComponent();
       NavigationPage.SetHasNavigationBar(this, false);
       NavigationPage.SetTitleView(this, null);
-      Common.Start(5);
-      communication cm = new communication();
+      Common.Start(1, true);
+      //communication cm = new communication();
+      IBIDSsv cm = new udp();
       cm.Connect(string.Empty);
       Common.Add(ref cm);
       DispCom.ViewChanged += MainPage_PageChange;

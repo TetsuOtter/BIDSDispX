@@ -22,8 +22,18 @@ namespace SPDisp
       BindingContext = ds;
     }
 
-    public void OnBSMDChanged(object sender, TR.BIDSSMemLib.SMemLib.BSMDChangedEArgs e) { ds.SpeedD = e.NewData.StateData.V; }
+    public void OnBSMDChanged(object sender, TR.BIDSSMemLib.SMemLib.BSMDChangedEArgs e)
+    {
+      if (e.NewData.StateData.T > e.OldData.StateData.T) ds.SpeedD = e.NewData.StateData.V;
+    }
+
+    private void BackBtnEv(object sender, EventArgs e)
+    {
+      TR.BIDSDispX.Core.DispCom.ViewChange();
+    }
   }
+
+
   internal class DispString : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
