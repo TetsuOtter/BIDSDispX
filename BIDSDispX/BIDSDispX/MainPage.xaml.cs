@@ -15,7 +15,17 @@ namespace TR.BIDSDispX
       NavigationPage.SetHasNavigationBar(this, false);
       NavigationPage.SetTitleView(this, null);
       Common.Start(1, true);
-      //communication cm = new communication();
+
+      #region BinaryASSetting
+      Common.AutoSendSetting.BasicBVE5AS = false;
+      Common.AutoSendSetting.BasicCommonAS = false;
+      Common.AutoSendSetting.BasicConstAS = false;
+      Common.AutoSendSetting.BasicHandleAS = false;
+      Common.AutoSendSetting.BasicOBVEAS = false;
+      Common.AutoSendSetting.BasicPanelAS = false;
+      Common.AutoSendSetting.BasicSoundAS = false;
+      #endregion
+
       IBIDSsv cm = new udp();
       cm.Connect(string.Empty);
       Common.Add(ref cm);
