@@ -16,7 +16,7 @@ namespace TR.BIDSDispX
       NavigationPage.SetTitleView(this, null);
       Common.Start(1, true);
 
-      #region BinaryASSetting
+      #region BinaryAS Setting
       Common.AutoSendSetting.BasicBVE5AS = false;
       Common.AutoSendSetting.BasicCommonAS = false;
       Common.AutoSendSetting.BasicConstAS = false;
