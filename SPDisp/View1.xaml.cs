@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -24,7 +20,10 @@ namespace SPDisp
 
     public void OnBSMDChanged(object sender, TR.BIDSSMemLib.SMemLib.BSMDChangedEArgs e)
     {
-      if (e.NewData.StateData.T > e.OldData.StateData.T) ds.SpeedD = e.NewData.StateData.V;
+      //if (e.NewData.StateData.T > e.OldData.StateData.T) ds.SpeedD = e.NewData.StateData.V;
+      //if (!Equals(e.NewData.StateData.T, e.OldData.StateData.T)) ds.SpeedStr = TimeSpan.FromMilliseconds(e.NewData.StateData.T).ToString("hh:mm:ss.f");
+      //if (!Equals(e.OldData.StateData.Z, e.NewData.StateData.Z)) ds.SpeedD = e.NewData.StateData.Z;
+      if (!Equals(e.OldData.StateData.V, e.NewData.StateData.V)) ds.SpeedD = e.NewData.StateData.V;
     }
 
     private void BackBtnEv(object sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace SPDisp
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    private string speedStr = "0.0 km/h";
+    private string speedStr = "0.0";
     private double speedD = 0.0;
 
     public string SpeedStr
@@ -57,7 +56,7 @@ namespace SPDisp
       set
       {
         speedD = value;
-        SpeedStr = speedD.ToString("0.0") + " km/h";
+        SpeedStr = speedD.ToString("0.0");// + " kmph";
       }
     }
   }
