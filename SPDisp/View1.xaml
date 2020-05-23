@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SPDisp"
              mc:Ignorable="d"
+						 Scale="1"
              x:Class="SPDisp.View1">
   <ContentView.BindingContext>
     <local:DispString/>
