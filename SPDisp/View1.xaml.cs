@@ -22,8 +22,8 @@ namespace SPDisp
 
 		public void OnBSMDChanged(object sender, TR.BIDSSMemLib.SMemLib.BSMDChangedEArgs e)
 		{
-			//if (e.NewData.StateData.T > e.OldData.StateData.T) ds.SpeedD = e.NewData.StateData.V;
-			if (e.NewData.StateData.T != e.OldData.StateData.T) _ = Task.Run(() =>
+			if (e.NewData.StateData.T > e.OldData.StateData.T) ds.SpeedD = e.NewData.StateData.V;
+			/*if (e.NewData.StateData.T != e.OldData.StateData.T) _ = Task.Run(() =>
 				 {
 					 TimeSpan ts = TimeSpan.FromMilliseconds(e.NewData.StateData.T);
 					 //ds.SpeedStr = new StringBuilder().Append(ts.Hours.ToString("00")).Append(':').Append(ts.Minutes.ToString("00")).Append(':').Append(ts.Seconds.ToString("00")).ToString();
@@ -31,7 +31,7 @@ namespace SPDisp
 					 ds.HH = ts.Hours;
 					 ds.MM = ts.Minutes;
 					 ds.SS = ts.Seconds;
-				 });
+				 });*/
 			//if (!Equals(e.OldData.StateData.Z, e.NewData.StateData.Z)) ds.SpeedD = e.NewData.StateData.Z;
 			//if (!Equals(e.OldData.StateData.V, e.NewData.StateData.V)) ds.SpeedD = e.NewData.StateData.V;
 		}
@@ -65,8 +65,11 @@ namespace SPDisp
 			get => speedD;
 			set
 			{
-				speedD = value;
-				SpeedStr = speedD.ToString("0.0");// + " kmph";
+				if (speedD != value)
+				{
+					speedD = value;
+					SpeedStr = speedD.ToString("0.0");// + " kmph";
+				}
 			}
 		}
 		private string HHStr = "00";
