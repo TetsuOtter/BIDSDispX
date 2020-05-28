@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace TR.drivesup
 {
-  public class RootClass : IBIDSDispX
+  public class BDXClass : IBIDSDispX
   {
     public ContentView FirstView => new RootView();
 
