@@ -4,10 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TR.drivesup</AssemblyName>
     <RootNamespace>TR.drivesup</RootNamespace>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
   </ItemGroup>
 
   <ItemGroup>
