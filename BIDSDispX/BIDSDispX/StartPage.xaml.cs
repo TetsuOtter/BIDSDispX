@@ -33,8 +33,8 @@ namespace TR.BIDSDispX
 		}
 
 		//private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new CATSDisp();
-		private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new SPDisp.Class1();
-		//private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new drivesup.RootClass();
+		//private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new SPDisp.Class1();
+		//private void CATS_Start(object sender, EventArgs e) => DispCom.CurrentView = new drivesup.BDXClass();
 
 		private string FDPath => OSync.ModsFolderName;
 
@@ -100,6 +100,8 @@ namespace TR.BIDSDispX
 		public void OnUnloaded() { }
 
 		private void AppExitEv(object sender, EventArgs e) => DispCom.AppExit();
+
+		private void SampleV_Start(object sender, EventArgs e) => DispCom.CurrentView = new SampleView.MeterView();
 	}
 
 	internal class SetValue : INotifyPropertyChanged
