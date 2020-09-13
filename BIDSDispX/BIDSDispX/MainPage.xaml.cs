@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using TR.BIDSsv;
 using TR.BIDSDispX.Core;
+using System.Threading.Tasks;
 
 namespace TR.BIDSDispX
 {
@@ -29,6 +30,9 @@ namespace TR.BIDSDispX
 			IBIDSsv cm = new udp();
 			cm.Connect(string.Empty);
 			Common.Add(ref cm);
+
+			DispCom.MainPageInstance = this;
+
 			DispCom.ViewChanged += MainPage_PageChange;
 
 			DispCom.CurrentView = new StartPage();
