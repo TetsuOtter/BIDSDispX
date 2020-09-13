@@ -5,22 +5,23 @@
 						 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 						 xmlns:local="clr-namespace:TR.BIDSDispX"
 						 mc:Ignorable="d"
+						 Visual="Material"
 						 x:Class="TR.BIDSDispX.StartPage">
 	<ContentView.BindingContext>
 		<local:SetValue/>
 	</ContentView.BindingContext>
 
-	<Grid Margin="5">
+	<Grid Margin="5" BackgroundColor="Transparent">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
 		<StackLayout Grid.Row="0">
-			<Label Text="BIDSDisp FormsTest" 
+			<Label Text="BIDSDispX" 
 						 FontSize="Large"
 					 HorizontalOptions="Center"
 					 VerticalOptions="CenterAndExpand" />
-			<Button Text="Start C-ATS Display" Clicked="CATS_Start"/>
+			<Button Text="Start Sample View" Clicked="SampleV_Start"/>
 			<Label Text="{Binding Msg}" 
 						 FontSize="Large"
 					 HorizontalOptions="Center"
@@ -31,13 +32,13 @@
 			<StackLayout Orientation="Horizontal" HeightRequest="40">
 				<Button Text="App Exit" Clicked="AppExitEv" HorizontalOptions="Start"/>
 				<Button Text="Reflesh" Clicked="Liblist_Reflesh" HorizontalOptions="End"/>
-				<Button Text="Add Local LIB" Clicked="Add_Local_Lib" HorizontalOptions="End"/>
+				<Button Text="Add Local LIB" Clicked="Add_Local_Lib" HorizontalOptions="End" IsEnabled="False"/>
 			</StackLayout>
-			<Button Text="Load Selected Library" Clicked="LoadLib"/>
+			<Button Text="Load Selected Library" Clicked="LoadLib" IsEnabled="False"/>
 		</StackLayout>
 		<ScrollView IsVisible="{Binding LicenseLabVisible}" BackgroundColor="LightGray" Margin="5" Grid.Row="0">
 			<Label x:Name="LicenseLab" IsVisible="{Binding LicenseLabVisible}" Margin="5" FlowDirection="LeftToRight"/>
 		</ScrollView>
-		<Button Grid.Row="1" Text="License" Clicked="ShowLicense"/>
+		<Button Grid.Row="1" Text="License (Open/Close)" Clicked="ShowLicense"/>
 	</Grid>
 </ContentView>
