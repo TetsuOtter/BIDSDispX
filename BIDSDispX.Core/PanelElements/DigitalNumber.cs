@@ -8,7 +8,7 @@ namespace TR.BIDSDispX.Core.PnlElms
   {
     Grid MomG = new Grid();
     Image dnImg = new Image();
-    DigitalNumberCV dncv = new DigitalNumberCV();
+    //DigitalNumberCV dncv = new DigitalNumberCV();
     public DigitalNumber()
     {
       /*MomG.WidthRequest = IntervalX;
@@ -19,7 +19,7 @@ namespace TR.BIDSDispX.Core.PnlElms
       
       //MomG.Children.Add(dnImg);
       
-      Content = dncv;
+      //Content = dncv;
       
     }
 

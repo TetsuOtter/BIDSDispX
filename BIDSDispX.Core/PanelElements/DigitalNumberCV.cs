@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿/*
+using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.IO;
@@ -194,3 +195,4 @@ namespace TR.BIDSDispX.Core.PnlElms
 
   }
 }
+*/
