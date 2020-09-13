@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Xamarin.Forms;
 
 namespace TR.BIDSDispX.iOS
 {
@@ -22,8 +23,15 @@ namespace TR.BIDSDispX.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+      Forms.SetFlags("Shapes_Experimental");
+
+      Forms.Init();
+
+      //ref : https://dev.classmethod.jp/articles/xamarin-forms-visual-material-getting-started/
+      //to use Material Design
+      FormsMaterial.Init();
+
+      LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }
