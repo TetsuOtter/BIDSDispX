@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+						 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+						 x:Class="TR.BIDSDispX.SampleView.SettingView">
+	<ContentView.Content>
+		<StackLayout>
+			<Label Text="MeterView Settings" />
+
+			<Path Data="M 10,100 L 100,100 100,50Z"
+      Stroke="Black"
+      StrokeThickness="1"
+      Aspect="Uniform"
+      HorizontalOptions="Start" />
+
+			<Button Text="Back without Save" Clicked="Back_withoutSave_Clicked" />
+			<Button Text="Save the Change" Clicked="Save_Button_Clicked" />
+		</StackLayout>
+	</ContentView.Content>
+</ContentView>
