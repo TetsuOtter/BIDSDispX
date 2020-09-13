@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TR.BIDSsv;
 using Xamarin.Forms;
 
@@ -6,6 +7,8 @@ namespace TR.BIDSDispX.Core
 {
   public static class DispCom
   {
+    static public ContentPage MainPageInstance { private get; set; }
+
     private static IBIDSDispX currentView = null;
 
     public static IBIDSDispX CurrentView
@@ -44,5 +47,11 @@ namespace TR.BIDSDispX.Core
       Common.Dispose();
       System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
     }
+
+    static public Task DisplayAlert(string title, string Msg, string CancelBtnText)
+      => MainPageInstance.DisplayAlert(title, Msg, CancelBtnText);
+    static public Task<bool> DisplayAlert(string title, string Msg, string AcceptBtnText, string CancelBtnText)
+      => MainPageInstance.DisplayAlert(title, Msg, AcceptBtnText, CancelBtnText);
+
   }
 }
