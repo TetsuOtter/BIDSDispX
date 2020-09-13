@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using TR.BIDSDispX.Core;
 using TR.BIDSDIspX.Droid;
+using Xamarin.Forms;
 
 namespace TR.BIDSDispX.Droid
 {
@@ -15,7 +16,7 @@ namespace TR.BIDSDispX.Droid
   [Activity(Label = "BIDSDispX", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
   public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
   {
-    SystemUiFlags systemUiFlags = SystemUiFlags.LayoutStable
+    readonly SystemUiFlags systemUiFlags = SystemUiFlags.LayoutStable
             | SystemUiFlags.LayoutHideNavigation
             | SystemUiFlags.LayoutFullscreen
             | SystemUiFlags.HideNavigation
@@ -34,20 +35,32 @@ namespace TR.BIDSDispX.Droid
       {
         Window.AddFlags(WindowManagerFlags.Fullscreen);
         Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+        Window.AddFlags(WindowManagerFlags.ShowWhenLocked);
       }
 
       base.OnCreate(savedInstanceState);
 
+      Forms.SetFlags("Shapes_Experimental");
+
       Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-      global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+			Forms.Init(this, savedInstanceState);
+
+      //ref : https://dev.classmethod.jp/articles/xamarin-forms-visual-material-getting-started/
+      //to use Material Design
+      FormsMaterial.Init(this, savedInstanceState);
+
       LoadApplication(new App());
     }
-
+    void OnReFullScreenRequired()
+    {
+      Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(int)systemUiFlags;
+    }
+    
     protected override void OnResume()
     {
       base.OnResume();
-      Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(int)systemUiFlags;
 
+      OnReFullScreenRequired();
     }
 
     public override void OnBackPressed()
@@ -68,5 +81,13 @@ namespace TR.BIDSDispX.Droid
 
       base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-  }
+
+		public override void OnWindowFocusChanged(bool hasFocus)
+		{
+			base.OnWindowFocusChanged(hasFocus);
+
+			if (hasFocus)
+        OnReFullScreenRequired();
+    }
+	}
 }
