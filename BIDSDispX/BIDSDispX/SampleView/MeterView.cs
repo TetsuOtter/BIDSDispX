@@ -51,7 +51,6 @@ namespace TR.BIDSDispX.SampleView
 		Needle needle_black_shadow = new Needle
 		{
 			Margin = new Thickness(51, 102, 0, 0),
-			NeedleMargin = new Thickness(50, 100, 0, 0),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
 			NeedleOpacity = 0.5,
@@ -60,7 +59,6 @@ namespace TR.BIDSDispX.SampleView
 		Needle needle_black = new Needle
 		{
 			Margin = new Thickness(50, 100, 0, 0),
-			NeedleMargin = new Thickness(50, 100, 0, 0),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
 			Radius = 150
@@ -68,7 +66,7 @@ namespace TR.BIDSDispX.SampleView
 
 		ScaleMarksView SMV = new ScaleMarksView()
 		{
-			Margin = new Thickness(40, 45, 0, 0),
+			Margin = new Thickness(40, 90, 0, 0),
 			Radius = 160
 		};
 
