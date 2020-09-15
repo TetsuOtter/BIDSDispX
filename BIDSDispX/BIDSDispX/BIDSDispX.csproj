@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>BIDSDispX</AssemblyName>
-    <Copyright>Copyright 2019 Tetsu Otter</Copyright>
+    <Copyright>Copyright 2020 Tetsu Otter</Copyright>
     <RootNamespace>TR.BIDSDispX</RootNamespace>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
@@ -54,9 +54,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="SampleView\Needle.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="SampleView\SettingView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -69,9 +66,6 @@
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <!--<None Update="CATSDisp.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>-->
     <None Update="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
