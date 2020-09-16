@@ -1,44 +1,129 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
+﻿
 using Xamarin.Forms;
-
 namespace TR.BIDSDispX.SampleView
 {
 	public class ScaleMarksView : Grid, IAngleAndValMinMax
 	{
-		public double MaxValAngle { get; set; } = 210;
-		public double MinValAngle { get; set; } = -30;
-		public double MinValue { get; set; } = 0;
-		public double MaxValue { get; set; } = 160;
-
-		List<BoxView> Marks_L = new List<BoxView>();
-		/// <summary>文字表示付きの目盛の基本設定</summary>
-		public Marks Mark_L_Base { get; set; } = new Marks
+		#region Properties
+		private double __MaxValAngle = 210;
+		/// <summary>最大値をとるときの目盛の角度[deg]  ←:0, ↑:90, →:180</summary>
+		public double MaxValAngle
 		{
-			Mark_Step = 20,
-			HeightRequest = 4,
-			WidthRequest = 20,
-			Color = Color.Red
-		};
+			get => __MaxValAngle;
+			set
+			{
+				if (__MaxValAngle == value)
+					return;
 
-		List<BoxView> Marks_M = new List<BoxView>();
-		/// <summary>中サイズの目盛の基本設定</summary>
-		public Marks Mark_M_Base { get; set; } = new Marks
-		{
-			Mark_Step = 10,
-			HeightRequest = 2,
-			WidthRequest = 20,
-		};
+				__MaxValAngle = value;
+				PropUpdated();
+			}
+		}
 
-		List<BoxView> Marks_S = new List<BoxView>();
-		/// <summary>小サイズの目盛の基本設定</summary>
-		public Marks Mark_S_Base { get; set; } = new Marks
+		private double __MinValAngle = -30;
+		/// <summary>最小値をとるときの目盛の角度[deg]  ←:0, ↑:90, →:180</summary>
+		public double MinValAngle
 		{
-			Mark_Step = 5,
-			HeightRequest = 2,
-			WidthRequest = 10,
-		};
+			get => __MinValAngle;
+			set
+			{
+				if (__MinValAngle == value)
+					return;
+
+				__MinValAngle = value;
+				PropUpdated();
+			}
+		}
+
+		private double __MinValue = 0;
+		/// <summary>表示の最小値[km/h]</summary>
+		public double MinValue
+		{
+			get => __MinValue;
+			set
+			{
+				if (__MinValue == value)
+					return;
+
+				__MinValue = value;
+				PropUpdated();
+			}
+		}
+
+		private double __MaxValue = 160;
+		/// <summary>表示の最大値[km/h]</summary>
+		public double MaxValue
+		{
+			get => __MaxValue;
+			set
+			{
+				if (__MaxValue == value)
+					return;
+
+				__MaxValue = value;
+				PropUpdated();
+			}
+		}
+
+		private int __MarkStep = 10;
+		/// <summary>目盛を配置する間隔[km/h]</summary>
+		public int MarkStep
+		{
+			get => __MarkStep;
+			set
+			{
+				if (__MarkStep == value)
+					return;
+
+				__MarkStep = value;
+				PropUpdated();
+			}
+		}
+
+		private Color __MarkColor = Color.Black;
+		/// <summary>目盛の色</summary>
+		public Color MarkColor
+		{
+			get => __MarkColor;
+			set
+			{
+				if (__MarkColor == value)
+					return;
+
+				__MarkColor = value;
+				PropUpdated();
+			}
+		}
+
+		private double __MarkHeight = 2;
+		/// <summary>目盛の高さ</summary>
+		public double MarkHeight
+		{
+			get => __MarkHeight;
+			set
+			{
+				if (__MarkHeight == value)
+					return;
+
+				__MarkHeight = value;
+				PropUpdated();
+			}
+		}
+
+		private double __MarkWidth = 10;
+		/// <summary>目盛の幅</summary>
+		public double MarkWidth
+		{
+			get => __MarkWidth;
+			set
+			{
+				if (__MarkWidth == value)
+					return;
+
+				__MarkWidth = value;
+				PropUpdated();
+			}
+		}
 
 		double __Radius = 110;
 		public double Radius
@@ -46,85 +131,59 @@ namespace TR.BIDSDispX.SampleView
 			get => __Radius;
 			set
 			{
+				if (__Radius == value)
+					return;
+
 				__Radius = value;
 				HeightRequest = WidthRequest = __Radius * 2;
+
+				PropUpdated();
 			}
 		}
+		#endregion
 
 		public ScaleMarksView()
 		{
 			HorizontalOptions = VerticalOptions = LayoutOptions.Start;
+			
 			HeightRequest = WidthRequest = Radius * 2;
 		}
 
-		public void PropsUpdated()
+		/// <summary>PropUpdatedの処理が重複して呼ばれていないかをチェック</summary>
+		private bool PropUpdateAlreadyRequested = false;
+		public void PropUpdated()
 		{
-			Children.Clear();
+			if (PropUpdateAlreadyRequested)
+				return;//二重で処理する必要はない
 
-			Marks_S = Mark_S_Base.GetBVList(this, Radius);
-			Marks_M = Mark_M_Base.GetBVList(this, Radius);
-			Marks_L = Mark_L_Base.GetBVList(this, Radius);
+			PropUpdateAlreadyRequested = true;
 
-			if (Marks_L?.Count > 0)
-				for (int i = 0; i < Marks_L.Count; i++)
-					Children.Add(Marks_L[i]);
-
-			if (Marks_M?.Count > 0)
-				for (int i = 0; i < Marks_M.Count; i++)
-					Children.Add(Marks_M[i]);
-
-			if (Marks_S?.Count > 0)
-				for (int i = 0; i < Marks_S.Count; i++)
-					Children.Add(Marks_S[i]);
-		}
-
-		public class Marks
-		{
-			public bool IsEnabled { get; set; } = true;
-			public LayoutOptions HorizontalOptions { get; set; } = LayoutOptions.Start;
-			public LayoutOptions VerticalOptions { get; set; } = LayoutOptions.Start;
-			public Color Color { get; set; } = Color.Black;
-			public double HeightRequest { get; set; } = 2;
-			public double WidthRequest { get; set; } = 10;
-
-			public int Mark_Step { get; set; } = 2;
-
-			public List<BoxView> GetBVList(in IReadOnlyAngleAndValMinMax minmax, in double Radius)
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
-				List<BoxView> ret = new List<BoxView>();
+				Children?.Clear();//既存の表示を削除
 
-				if (IsEnabled)
-					for (int i = (int)minmax.MinValue; i <= minmax.MaxValue; i += Mark_Step)
-						ret.Add(GetMarkBV(minmax, Radius, i));
-
-				return ret;
-			}
-
-			public BoxView GetMarkBV(in IReadOnlyAngleAndValMinMax minmax, double Radius, in double numOfStep)
-			{
-				BoxView bv = new BoxView
+				for(int i=(int)MinValue; i <= MaxValue; i += MarkStep)
 				{
-					HorizontalOptions = HorizontalOptions,
-					VerticalOptions = VerticalOptions,
-					Color = Color,
-					HeightRequest = HeightRequest,
-					WidthRequest = WidthRequest,
-					AnchorY = 0.5,
-				};
-				double angle = numOfStep.GetAngle(minmax);
-				bv.SizeChanged += (s, e) =>
-				{
-					BoxView b = s as BoxView;
-					b.AnchorX = Radius / b.Width;
-					b.Margin = new Thickness(0, Radius - (b.Height / 2), 0, 0);
-					_ = bv.RotateTo(angle, 3000);
-				};
-				//_ = bv.RotateTo(angle, 0);
+					BoxView bv = new BoxView
+					{
+						HorizontalOptions = LayoutOptions.Start,
+						VerticalOptions = LayoutOptions.Start,
+						Color = MarkColor,
+						HeightRequest = MarkHeight,
+						WidthRequest = MarkWidth,
+						AnchorY = 0.5,
+						AnchorX = Radius / MarkWidth,
+						Margin = new Thickness(0, Radius - (MarkHeight / 2), 0, 0)
+					};
 
-				return bv;
-			}
+					Children.Add(bv);
 
-			//public void SetAngle(BoxView bv, in IReadOnlyAngleAndValMinMax minmax) => _ = bv.RotateTo(NumOfStep.GetAngle(minmax), 0);
+					_ = bv.RotateTo(((double)i).GetAngle(this), 1000);
+				}
+
+				PropUpdateAlreadyRequested = false;//処理完了済を記録
+			});
+
 		}
 	}
 
