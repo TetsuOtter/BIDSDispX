@@ -22,7 +22,7 @@ namespace TR.BIDSDispX.SampleView
 		{
 			this.Content = MainNeedle;
 
-			Dispatcher.BeginInvokeOnMainThread(() => NeedleReDraw(NeedleHeight));
+			PropUpdated();
 		}
 
 		public uint MoveTimeLength { get; set; } = 50;
@@ -48,13 +48,17 @@ namespace TR.BIDSDispX.SampleView
 				__ValueToShow = value;
 			}
 		}
+		private double __Radius = 100;
 		public double Radius
 		{
-			get => MainNeedle.Width;//__Radius;
+			get => __Radius;
 			set
 			{
-				MainNeedle.WidthRequest = value;//MainNeedle.ScaleX = (__Radius = value) / MainNeedle.Width;
-				Dispatcher.BeginInvokeOnMainThread(() => NeedleReDraw(NeedleHeight));
+				if (__Radius == value)
+					return;
+
+				MainNeedle.WidthRequest =__Radius = value;
+				PropUpdated();
 			}
 		}
 		public double NeedleHeight
@@ -63,7 +67,7 @@ namespace TR.BIDSDispX.SampleView
 			set
 			{
 				MainNeedle.HeightRequest = value;
-				Dispatcher.BeginInvokeOnMainThread(() => NeedleReDraw(NeedleHeight));
+				PropUpdated();
 			}
 		}
 
@@ -91,7 +95,7 @@ namespace TR.BIDSDispX.SampleView
 				if (__Triangle_StepCount != value)
 				{
 					__Triangle_StepCount = value;
-					NeedleReDraw(NeedleHeight);
+					PropUpdated();
 				}
 			}
 		}
@@ -105,45 +109,56 @@ namespace TR.BIDSDispX.SampleView
 				if (__Triangle_Width != value)
 				{
 					__Triangle_Width = value;
-					NeedleReDraw(NeedleHeight);
+					PropUpdated();
 				}
 			}
 		}
 
-
-		private void NeedleReDraw(double N_Height)
+		/// <summary>PropUpdatedの処理が重複して呼ばれていないかをチェック</summary>
+		private bool PropUpdateAlreadyRequested = false;
+		public void PropUpdated()
 		{
-			MainNeedle.Margin = new Thickness(0, Radius - (N_Height / 2), 0, 0);
+			if (PropUpdateAlreadyRequested)
+				return;//二重で処理する必要はない
 
-			MainNeedle.Children.Clear();
+			PropUpdateAlreadyRequested = true;
 
-			double CurrentTriMarginY = N_Height / 2;
-			double dH = CurrentTriMarginY / Triangle_StepCount;
-
-			for (double i = 0; i < Triangle_Width; i += (Triangle_Width / Triangle_StepCount))
+			Dispatcher.BeginInvokeOnMainThread(()=>
 			{
-				CurrentTriMarginY -= dH;
+				MainNeedle.Margin = new Thickness(0, Radius - (NeedleHeight / 2), 0, 0);
 
-				BoxView BV = new BoxView
+				MainNeedle.Children.Clear();
+
+				double CurrentTriMarginY = NeedleHeight / 2;
+				double dH = CurrentTriMarginY / Triangle_StepCount;
+
+				for (double i = 0; i < Triangle_Width; i += (Triangle_Width / Triangle_StepCount))
 				{
-					Margin = new Thickness(i, CurrentTriMarginY),
+					CurrentTriMarginY -= dH;
+
+					BoxView BV = new BoxView
+					{
+						Margin = new Thickness(i, CurrentTriMarginY),
+						HorizontalOptions = LayoutOptions.Start,
+						VerticalOptions = LayoutOptions.Center,
+						WidthRequest = Triangle_Width / Triangle_StepCount,
+					};
+					BV.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
+					MainNeedle.Children.Add(BV);
+				}
+
+				BoxView BV_Main = new BoxView
+				{
+					Margin = new Thickness(Triangle_Width, 0, 0, 0),
 					HorizontalOptions = LayoutOptions.Start,
 					VerticalOptions = LayoutOptions.Center,
-					WidthRequest = Triangle_Width / Triangle_StepCount,
+					WidthRequest = Radius - Triangle_Width
 				};
-				BV.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
-				MainNeedle.Children.Add(BV);
-			}
+				BV_Main.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
+				MainNeedle.Children.Add(BV_Main);
 
-			BoxView BV_Main = new BoxView
-			{
-				Margin = new Thickness(Triangle_Width, 0, 0, 0),
-				HorizontalOptions = LayoutOptions.Start,
-				VerticalOptions = LayoutOptions.Center,
-				WidthRequest = Radius - Triangle_Width
-			};
-			BV_Main.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
-			MainNeedle.Children.Add(BV_Main);
+				PropUpdateAlreadyRequested = false;
+			});
 		}
 
 		private class ColorPropToBind : INotifyPropertyChanged
