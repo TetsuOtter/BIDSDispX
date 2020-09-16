@@ -1,6 +1,8 @@
 ﻿
+using System;
 using System.Text;
 
+using TR.BIDSDispX.Core.UFuncs;
 using TR.BIDSSMemLib;
 
 using Xamarin.Essentials;
@@ -10,19 +12,41 @@ namespace TR.BIDSDispX.SampleView
 {
 	public class MeterView : ContentView, IBIDSDispX
 	{
+		static readonly double RadiusValue = Math.Min(DeviceDisplay.MainDisplayInfo.Height, DeviceDisplay.MainDisplayInfo.Width).Dp2Px() / 2.1;
+		static readonly double MarginX = 50.Dp2Px();
+		static readonly double MarginY = 50.Dp2Px();
+		static readonly double Shadow_DstX = 4.Dp2Px();
+		static readonly double Shadow_DstY = 4.Dp2Px();
+		static readonly double Shadow_Opacity = 0.5;
+		static readonly double Needle_Padding = 10.Dp2Px();
+		static readonly double Needle_Height = 12.Dp2Px();
+		static readonly double SMV_L_Height = 8.Dp2Px();
+		static readonly double SMV_M_Height = 4.Dp2Px();
+		static readonly double SMV_S_Height = 2.Dp2Px();
+		static readonly double SMV_L_Width = 32.Dp2Px();
+		static readonly double SMV_M_Width = 32.Dp2Px();
+		static readonly double SMV_S_Width = 16.Dp2Px();
+		static readonly int SMV_L_Step = 20;
+		static readonly int SMV_M_Step = 10;
+		static readonly int SMV_S_Step = 2;
+		static readonly Color SMV_L_Color = Color.Red;
+		static readonly Color SMV_M_Color = Color.Aqua;
+		static readonly Color SMV_S_Color = Color.Black;
+
+
 		Button plus_btn = new Button
 		{
 			Text = "+",
 			HorizontalOptions = LayoutOptions.Start,
-			VerticalOptions = LayoutOptions.Center,
-			Margin = new Thickness(50)
+			VerticalOptions = LayoutOptions.End,
+			Margin = new Thickness(80)
 		};
 		Button minus_btn = new Button
 		{
 			Text = "-",
 			HorizontalOptions = LayoutOptions.End,
-			VerticalOptions = LayoutOptions.Center,
-			Margin = new Thickness(50)
+			VerticalOptions = LayoutOptions.End,
+			Margin = new Thickness(80)
 		};
 		Label Lab = new Label
 		{
@@ -50,25 +74,58 @@ namespace TR.BIDSDispX.SampleView
 
 		Needle needle_black_shadow = new Needle
 		{
-			Margin = new Thickness(51, 102, 0, 0),
+			Margin = new Thickness(Needle_Padding + Shadow_DstX, Needle_Padding + Shadow_DstY, 0, 0),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
-			NeedleOpacity = 0.5,
-			Radius = 150
+			NeedleOpacity = Shadow_Opacity,
+			Radius = RadiusValue - Needle_Padding,
+			NeedleHeight = Needle_Height,
 		};
 		Needle needle_black = new Needle
 		{
-			Margin = new Thickness(50, 100, 0, 0),
+			Margin = new Thickness(Needle_Padding, Needle_Padding, 0, 0),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
-			Radius = 150
+			Radius = RadiusValue - Needle_Padding,
+			NeedleHeight = Needle_Height,
 		};
 
-		ScaleMarksView SMV = new ScaleMarksView()
+		ScaleMarksView SMV_L = new ScaleMarksView()
 		{
-			Margin = new Thickness(40, 90, 0, 0),
-			Radius = 160
+			Margin = new Thickness(0),
+			Radius = RadiusValue,
+
+			MarkStep = SMV_L_Step,
+			MarkColor = SMV_L_Color,
+
+			MarkHeight = SMV_L_Height,
+			MarkWidth = SMV_L_Width,
 		};
+
+		ScaleMarksView SMV_M = new ScaleMarksView()
+		{
+			Margin = new Thickness(0),
+			Radius = RadiusValue,
+
+			MarkStep = SMV_M_Step,
+			MarkColor = SMV_M_Color,
+
+			MarkHeight = SMV_M_Height,
+			MarkWidth = SMV_M_Width,
+		};
+
+		ScaleMarksView SMV_S = new ScaleMarksView()
+		{
+			Margin = new Thickness(0),
+			Radius = RadiusValue,
+
+			MarkStep = SMV_S_Step,
+			MarkColor = SMV_S_Color,
+
+			MarkHeight = SMV_S_Height,
+			MarkWidth = SMV_S_Width,
+		};
+
 
 
 		double __ValueToShow_Black = 0;
@@ -91,9 +148,20 @@ namespace TR.BIDSDispX.SampleView
 			Content = new Grid
 			{
 				Children = {
-					SMV,
-					needle_black_shadow,
-					needle_black,
+					new Grid
+					{
+						Margin = new Thickness(MarginX,MarginY),
+						HorizontalOptions = LayoutOptions.Center,
+						VerticalOptions = LayoutOptions.Center,
+						Children =
+						{
+							SMV_L,
+							SMV_M,
+							SMV_S,
+							needle_black_shadow,
+							needle_black,
+						}
+					},
 					Lab,
 					plus_btn,
 					minus_btn,
@@ -112,20 +180,24 @@ namespace TR.BIDSDispX.SampleView
 			plus_btn.Clicked += (s, e) => ValueToShow_Black += 5;
 			minus_btn.Clicked += (s, e) => ValueToShow_Black -= 5;
 
-			Dispatcher.BeginInvokeOnMainThread(() => SMV.PropsUpdated());
 
 			SizeChanged += MeterView_SizeChanged;
+			DeviceDisplay.MainDisplayInfoChanged += (s, e) =>
+			{
+				SMV_L.PropUpdated();
+				SMV_M.PropUpdated();
+				SMV_S.PropUpdated();
+				needle_black_shadow.PropUpdated();
+				needle_black.PropUpdated();
+			};
 		}
 
 		private void SettingView_ChangeOptsAccepted(object sender, System.EventArgs e)
 		{
-			//throw new System.NotImplementedException();
-			SMV.PropsUpdated();
 		}
 
 		private void MeterView_SizeChanged(object sender, System.EventArgs e)
 		{
-			//throw new System.NotImplementedException();
 		}
 
 		public ContentView FirstView { get => this; }
