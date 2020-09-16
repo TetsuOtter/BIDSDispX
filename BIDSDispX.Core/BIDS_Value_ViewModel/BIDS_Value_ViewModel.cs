@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.ComponentModel;
 using TR.BIDSsv;
+using TR.BIDSDispX.Core.UFuncs;
 
 namespace TR.BIDSDispX.Core
 {

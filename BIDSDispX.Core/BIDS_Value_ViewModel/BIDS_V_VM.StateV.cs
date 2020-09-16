@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 
+using TR.BIDSDispX.Core.UFuncs;
+
 namespace TR.BIDSDispX.Core
 {
   public partial class BIDS_Value_ViewModel : INotifyPropertyChanged, IDisposable
