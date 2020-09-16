@@ -35,10 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BIDSDispX.Core\BIDSDispX.Core.csproj" />
-    <ProjectReference Include="..\..\CATSDisp\CATSDisp.csproj" />
-    <ProjectReference Include="..\..\drivesup\drivesup.csproj" />
     <ProjectReference Include="..\..\IBIDSDispX\IBIDSDispX.csproj" />
-    <ProjectReference Include="..\..\SPDisp\SPDisp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
