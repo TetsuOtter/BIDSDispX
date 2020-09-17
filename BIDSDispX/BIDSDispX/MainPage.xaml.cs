@@ -27,9 +27,9 @@ namespace TR.BIDSDispX
 			Common.AutoSendSetting.BasicSoundAS = false;
 			#endregion
 
-			IBIDSsv cm = new udp();
+			/*IBIDSsv cm = new udp();
 			cm.Connect(string.Empty);
-			Common.Add(ref cm);
+			Common.Add(ref cm);*/
 
 			DispCom.MainPageInstance = this;
 
