@@ -20,9 +20,17 @@ namespace TR.BIDSDispX.Core.UFuncs
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static public int ToInt32(this bool value) => value ? TRUE_VALUE : FALSE_VALUE;
 
+
+    /// <summary>ピクセル値をDP(160dp=1inch, 64dp=1cm)に変換する</summary>
+    /// <param name="DPvalue">ピクセル値</param>
+    /// <returns>入力されたpx値と同等のdp値</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static public double Dp2Px(this in int DPvalue) => ((double)DPvalue).Dp2Px();
+    static public double Px2Dp(this in int DPvalue) => ((double)DPvalue).Px2Dp();
+
+    /// <summary>ピクセル値をDP(160dp=1inch, 64dp=1cm)に変換する</summary>
+    /// <param name="DPvalue">ピクセル値</param>
+    /// <returns>入力されたpx値と同等のdp値</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static public double Dp2Px(this in double DPvalue) => DPvalue / DeviceDisplay.MainDisplayInfo.Density;
+    static public double Px2Dp(this in double DPvalue) => DPvalue / DeviceDisplay.MainDisplayInfo.Density;
   }
 }
