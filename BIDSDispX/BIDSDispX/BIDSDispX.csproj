@@ -24,6 +24,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Fonts\IPA\ipag.ttf" />
+    <EmbeddedResource Include="Fonts\IPA\ipagp.ttf" />
+    <EmbeddedResource Include="Fonts\IPA\ipam.ttf" />
+    <EmbeddedResource Include="Fonts\IPA\ipamp.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IAtsPI" Version="1.0.0" />
     <PackageReference Include="PCLStorage" Version="1.0.2" />
     <PackageReference Include="TR.BIDSsv.udp" Version="1.0.1.1" />
