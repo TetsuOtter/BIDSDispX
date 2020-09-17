@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TR.BIDSDispX.SampleView
 {
 	public class ScaleLabelView : Grid, IAngleAndValMinMax
 	{
+		#region Properties
 		private double __MaxValAngle = 210;
 		/// <summary>最大値をとるときの目盛の角度[deg]  ←:0, ↑:90, →:180</summary>
 		public double MaxValAngle
@@ -98,9 +101,69 @@ namespace TR.BIDSDispX.SampleView
 			}
 		}
 
+		private double __Radius = 80;
+		public double Radius
+		{
+			get => __Radius;
+			set
+			{
+				if (__Radius == value)
+					return;
+
+				__Radius = value;
+				HeightRequest = WidthRequest = __Radius * 2;
+
+				PropUpdated();
+			}
+		}
+
+		private double __FontSize = 16;
+		public double FontSize
+		{
+			get => __FontSize;
+			set
+			{
+				if (__FontSize == value)
+					return;
+
+				__FontSize = value;
+				PropUpdated();
+			}
+		}
+
+		private string __FontFamily = string.Empty;
+		public string FontFamily
+		{
+			get => __FontFamily;
+			set
+			{
+				if (__FontFamily == value)
+					return;
+
+				__FontFamily = value;
+				PropUpdated();
+			}
+		}
+
+		private FontAttributes __FontAttributes = FontAttributes.None;
+		public FontAttributes FontAttributes
+		{
+			get => __FontAttributes;
+			set
+			{
+				if (__FontAttributes == value)
+					return;
+
+				__FontAttributes = value;
+				PropUpdated();
+			}
+		}
+
+		#endregion
+
 		public ScaleLabelView()
 		{
-
+			PropUpdated();
 		}
 
 		private bool PropUpdateAlreadyRequested = false;
@@ -111,12 +174,44 @@ namespace TR.BIDSDispX.SampleView
 
 			PropUpdateAlreadyRequested = true;
 
-			Dispatcher.BeginInvokeOnMainThread(() =>
+			MainThread.BeginInvokeOnMainThread(() =>
 			{
 				Children?.Clear();//既存の表示を削除
 
 				for (int i = (int)MinValue; i <= MaxValue; i += LabelStep)
 				{
+					double angle = ((double)i).GetAngle(this);
+					ContentView v = new ContentView
+					{
+						Content = new Label
+						{
+							HorizontalOptions = LayoutOptions.Center,
+							VerticalOptions = LayoutOptions.Center,
+							AnchorX = 0.5,
+							AnchorY = 0.5,
+							TextColor = this.TextColor,
+							FontSize = this.FontSize,
+							FontFamily = this.FontFamily,
+							FontAttributes = this.FontAttributes,
+							Rotation = -angle,
+							Text = i.ToString()
+						},
+
+						AnchorY = 0.5,
+						BackgroundColor = Color.Transparent,
+						HorizontalOptions = LayoutOptions.Start,
+						VerticalOptions = LayoutOptions.Start,
+						Rotation = angle
+					};
+					v.SizeChanged += (s, e) =>
+					{
+						ContentView cv = s as ContentView;
+
+						cv.Margin = new Thickness(0, Radius - (cv.Height / 2), 0, 0);
+						cv.AnchorX = Radius / cv.Width;
+					};
+
+					this.Children.Add(v);
 				}
 
 				PropUpdateAlreadyRequested = false;//処理完了済を記録
