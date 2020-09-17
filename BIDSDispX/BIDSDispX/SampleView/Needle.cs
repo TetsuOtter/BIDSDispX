@@ -1,5 +1,7 @@
 ﻿
 using System.ComponentModel;
+
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -80,7 +82,7 @@ namespace TR.BIDSDispX.SampleView
 				if (__Angle == value)
 					return;
 
-				Dispatcher.BeginInvokeOnMainThread(async () => await MainNeedle.RotateTo(value, MoveTimeLength));
+				MainThread.BeginInvokeOnMainThread(() => MainNeedle.Rotation = value);
 
 				__Angle = value;
 			}

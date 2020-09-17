@@ -1,4 +1,5 @@
 ﻿
+using Xamarin.Essentials;
 using Xamarin.Forms;
 namespace TR.BIDSDispX.SampleView
 {
@@ -158,13 +159,12 @@ namespace TR.BIDSDispX.SampleView
 
 			PropUpdateAlreadyRequested = true;
 
-			Dispatcher.BeginInvokeOnMainThread(() =>
+			MainThread.BeginInvokeOnMainThread(() =>
 			{
 				Children?.Clear();//既存の表示を削除
 
-				for(int i=(int)MinValue; i <= MaxValue; i += MarkStep)
-				{
-					BoxView bv = new BoxView
+				for (int i = (int)MinValue; i <= MaxValue; i += MarkStep)
+					Children.Add(new BoxView
 					{
 						HorizontalOptions = LayoutOptions.Start,
 						VerticalOptions = LayoutOptions.Start,
@@ -173,13 +173,9 @@ namespace TR.BIDSDispX.SampleView
 						WidthRequest = MarkWidth,
 						AnchorY = 0.5,
 						AnchorX = Radius / MarkWidth,
-						Margin = new Thickness(0, Radius - (MarkHeight / 2), 0, 0)
-					};
-
-					Children.Add(bv);
-
-					_ = bv.RotateTo(((double)i).GetAngle(this), 1000);
-				}
+						Margin = new Thickness(0, Radius - (MarkHeight / 2), 0, 0),
+						Rotation = ((double)i).GetAngle(this)
+					});
 
 				PropUpdateAlreadyRequested = false;//処理完了済を記録
 			});
