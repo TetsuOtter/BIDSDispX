@@ -31,7 +31,7 @@
 			</ScrollView>
 			<StackLayout Orientation="Horizontal" HeightRequest="40">
 				<Button Text="App Exit" Clicked="AppExitEv" HorizontalOptions="Start"/>
-				<Button Text="Reflesh" Clicked="Liblist_Reflesh" HorizontalOptions="End"/>
+				<Button Text="Reflesh" Clicked="Liblist_Reflesh" HorizontalOptions="End" IsEnabled="False"/>
 				<Button Text="Add Local LIB" Clicked="Add_Local_Lib" HorizontalOptions="End" IsEnabled="False"/>
 			</StackLayout>
 			<Button Text="Load Selected Library" Clicked="LoadLib" IsEnabled="False"/>
