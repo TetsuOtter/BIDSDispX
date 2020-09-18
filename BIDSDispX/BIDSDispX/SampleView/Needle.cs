@@ -133,7 +133,7 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__Radius = value;
-				MainThread.BeginInvokeOnMainThread(() => { HeightRequest = WidthRequest = value * 2; });
+				Dispatcher.BeginInvokeOnMainThread(() => { HeightRequest = WidthRequest = value * 2; });
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__NeedleHeight = value;
-				MainThread.BeginInvokeOnMainThread(() => MainNeedle.HeightRequest = value);
+				Dispatcher.BeginInvokeOnMainThread(() => MainNeedle.HeightRequest = value);
 				PropUpdated();//描画のやり直し
 			}
 		}
@@ -187,13 +187,13 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__Circle_Padding = value;
-				MainThread.BeginInvokeOnMainThread(() => MainNeedle.Margin = new Thickness(Circle_Padding));
+				Dispatcher.BeginInvokeOnMainThread(() => MainNeedle.Margin = new Thickness(Circle_Padding));
 			}
 		}
 
 		#region Direct Attatch Properties
-		public double NeedleWidth { get => MainNeedle.Width; set => MainThread.BeginInvokeOnMainThread(() => { MainNeedle.WidthRequest = value; }); }
-		public double Angle { get => Rotation; set => MainThread.BeginInvokeOnMainThread(() => Rotation = value); }//針だけじゃなく, ベースごと回転させる.
+		public double NeedleWidth { get => MainNeedle.Width; set => Dispatcher.BeginInvokeOnMainThread(() => { MainNeedle.WidthRequest = value; }); }
+		public double Angle { get => Rotation; set => Dispatcher.BeginInvokeOnMainThread(() => Rotation = value); }//針だけじゃなく, ベースごと回転させる.
 		#endregion
 		#endregion
 
@@ -234,7 +234,7 @@ namespace TR.BIDSDispX.SampleView
 		private void AngleUpdate() => Angle = ValueToShow.GetAngle(this);
 
 		private void ToApplyChangesForChildrenInmainThread(Action<int> act) =>
-			MainThread.BeginInvokeOnMainThread(() =>
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
 				if (MainNeedle.Children?.Count > 0)
 					for (int i = 0; i < MainNeedle.Children.Count; i++)

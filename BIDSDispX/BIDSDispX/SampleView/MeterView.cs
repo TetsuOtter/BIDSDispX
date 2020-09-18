@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 
+using TR.BIDSDispX.Core;
 using TR.BIDSDispX.Core.UFuncs;
 using TR.BIDSSMemLib;
 
@@ -12,10 +13,10 @@ namespace TR.BIDSDispX.SampleView
 {
 	public class MeterView : ContentView, IBIDSDispX
 	{
-		static readonly double RadiusValue = Math.Min(DeviceDisplay.MainDisplayInfo.Height, DeviceDisplay.MainDisplayInfo.Width).Px2Dp() / 2.1;
-		static readonly double MarginX = 16.Px2Dp();
-		static readonly double MarginY = 16.Px2Dp();
-		static readonly double Shadow_Dst = 4.Px2Dp();
+		static readonly double RadiusValue = Math.Min(DispCom.WindowWidth, DispCom.WindowHeight) / 2.1; //Math.Min(DeviceDisplay.MainDisplayInfo.Height, DeviceDisplay.MainDisplayInfo.Width).Px2Dp() / 2.1;
+		static readonly double MarginX = 0;
+		static readonly double MarginY = 0;
+		static readonly double Shadow_Dst = RadiusValue / 128;
 		static readonly double Shadow_Opacity = 0.5;
 		static readonly double Needle_Padding = RadiusValue / 16;
 		static readonly double Needle1_Height = 0.8 * RadiusValue / 16;
@@ -351,7 +352,7 @@ namespace TR.BIDSDispX.SampleView
 
 
 			SizeChanged += MeterView_SizeChanged;
-			DeviceDisplay.MainDisplayInfoChanged += (s, e) =>
+			/*DeviceDisplay.MainDisplayInfoChanged += (s, e) =>
 			{
 				SMV_L.PropUpdated();
 				SMV_M.PropUpdated();
@@ -360,7 +361,7 @@ namespace TR.BIDSDispX.SampleView
 				Needle1_main.PropUpdated();
 				Needle2_shadow.PropUpdated();
 				Needle2_main.PropUpdated();
-			};
+			};*/
 		}
 
 		private void SettingView_ChangeOptsAccepted(object sender, System.EventArgs e)

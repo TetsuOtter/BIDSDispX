@@ -119,7 +119,7 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__Radius = value;
-				MainThread.BeginInvokeOnMainThread(() => HeightRequest = WidthRequest = value * 2);
+				Dispatcher.BeginInvokeOnMainThread(() => HeightRequest = WidthRequest = value * 2);
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace TR.BIDSDispX.SampleView
 
 			PropUpdateAlreadyRequested = true;
 
-			MainThread.BeginInvokeOnMainThread(() =>
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
 				Children?.Clear();//既存の表示を削除
 
@@ -238,7 +238,7 @@ namespace TR.BIDSDispX.SampleView
 
 			LabsAngleUpdatedAlreadyRequested = true;
 
-			MainThread.BeginInvokeOnMainThread(() =>
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
 				if (PropUpdateAlreadyRequested)
 					return;
@@ -253,7 +253,7 @@ namespace TR.BIDSDispX.SampleView
 		}
 
 		private void ToApplyChangesForChildrenInmainThread(Action<int> act) =>
-			MainThread.BeginInvokeOnMainThread(() =>
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
 				if (Children?.Count > 0)
 					for (int i = 0; i < Children.Count; i++)

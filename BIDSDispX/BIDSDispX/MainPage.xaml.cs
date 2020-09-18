@@ -31,12 +31,19 @@ namespace TR.BIDSDispX
 			cm.Connect(string.Empty);
 			Common.Add(ref cm);*/
 
+			this.SizeChanged += (s, e) =>
+			{
+				DispCom.WindowHeight = Height;
+				DispCom.WindowWidth = Width;
+			};
+
 			DispCom.MainPageInstance = this;
 
 			DispCom.ViewChanged += MainPage_PageChange;
 
 			DispCom.CurrentView = new StartPage();
 		}
+
 
 		private void MainPage_PageChange(object sender, EventArgs e) => Content = (View)sender ?? new StartPage();
 		

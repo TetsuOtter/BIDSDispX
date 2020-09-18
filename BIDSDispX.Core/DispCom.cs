@@ -7,6 +7,8 @@ namespace TR.BIDSDispX.Core
 {
   public static class DispCom
   {
+    static public double WindowHeight { get; set; }
+    static public double WindowWidth { get; set; }
     static public ContentPage MainPageInstance { private get; set; }
 
     private static IBIDSDispX currentView = null;
