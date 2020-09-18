@@ -12,48 +12,76 @@ namespace TR.BIDSDispX.SampleView
 {
 	public class MeterView : ContentView, IBIDSDispX
 	{
-		static readonly double RadiusValue = Math.Min(DeviceDisplay.MainDisplayInfo.Height, DeviceDisplay.MainDisplayInfo.Width).Px2Dp() / 2.2;
-		static readonly double MarginX = 32.Px2Dp();
-		static readonly double MarginY = 32.Px2Dp();
-		static readonly double Shadow_DstX = 4.Px2Dp();
-		static readonly double Shadow_DstY = 4.Px2Dp();
+		static readonly double RadiusValue = Math.Min(DeviceDisplay.MainDisplayInfo.Height, DeviceDisplay.MainDisplayInfo.Width).Px2Dp() / 2.1;
+		static readonly double MarginX = 16.Px2Dp();
+		static readonly double MarginY = 16.Px2Dp();
+		static readonly double Shadow_Dst = 4.Px2Dp();
 		static readonly double Shadow_Opacity = 0.5;
-		static readonly double Needle_Padding = RadiusValue / 16; //12.Px2Dp();
-		static readonly double Needle_Height = RadiusValue / 32; //16.Px2Dp();
-		static readonly double SMV_L_Height = RadiusValue / 64; //8.Px2Dp();
-		static readonly double SMV_M_Height = RadiusValue / 128; //4.Px2Dp();
-		static readonly double SMV_S_Height = RadiusValue / 128; //4.Px2Dp();
-		static readonly double SMV_L_Width = RadiusValue / 8; //32.Px2Dp();
-		static readonly double SMV_M_Width = RadiusValue / 8; //32.Px2Dp();
-		static readonly double SMV_S_Width = RadiusValue / 16; //16.Px2Dp();
-		static readonly int SMV_L_Step = 20;
-		static readonly int SMV_M_Step = 10;
-		static readonly int SMV_S_Step = 2;
+		static readonly double Needle_Padding = RadiusValue / 16;
+		static readonly double Needle1_Height = 0.8 * RadiusValue / 16;
+		static readonly double Needle2_Height = RadiusValue / 16;
+		static readonly double Needle1_Width = RadiusValue * 1.1;
+		static readonly double Needle2_Width = RadiusValue * 1.15;
+
+		static readonly double SMV_L_Height = RadiusValue / 32;
+		static readonly double SMV_M_Height = RadiusValue / 64;
+		static readonly double SMV_S_Height = RadiusValue / 64;
+		static readonly double SMV_L_Width = RadiusValue / 8;
+		static readonly double SMV_M_Width = RadiusValue / 8;
+		static readonly double SMV_S_Width = RadiusValue / 16;
+		static readonly double MaxValue = 1000;
+		static readonly double MinValue = 0;
+		static readonly double MaxValAngle = 225;
+		static readonly double MinValAngle = -45;
+		static readonly int SMV_L_Step = 200;
+		static readonly int SMV_M_Step = 50;
+		static readonly int SMV_S_Step = 10;
 		static readonly Color SMV_L_Color = Color.Red;
 		static readonly Color SMV_M_Color = Color.Aqua;
 		static readonly Color SMV_S_Color = Color.Black;
-		static readonly double Label_Padding = RadiusValue / 7; //52.Px2Dp();
-		static readonly double Label_FontSize = RadiusValue / 8;
+		static readonly Color Needle1_Color = Color.Black;
+		static readonly Color Needle2_Color = Color.Red;
+		static readonly double Label_Padding = RadiusValue / 6.5;
+		static readonly double Label_FontSize = RadiusValue / 6;
 		static readonly string Label_FontFamily = string.Empty;//"IPA_Gothic";
-		static readonly FontAttributes Label_FontAtt = FontAttributes.None; // FontAttributes.Bold | FontAttributes.Italic;
+		static readonly FontAttributes Label_FontAtt = FontAttributes.Bold | FontAttributes.Italic;
+		static readonly double PlusMinusBtn_MarginLR = 80;
+		static readonly double PlusMinusBtn1_MarginBottom = 100;
+		static readonly double PlusMinusBtn2_MarginBottom = 50;
+		static readonly int PlusMinus_Step = 20;
 
 		Button plus_btn = new Button
 		{
 			Text = "+",
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(80)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom)
 		};
 		Button minus_btn = new Button
 		{
 			Text = "-",
 			HorizontalOptions = LayoutOptions.End,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(80)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom)
+		};
+		Button plus_btn2 = new Button
+		{
+			Text = "+",
+			HorizontalOptions = LayoutOptions.Start,
+			VerticalOptions = LayoutOptions.End,
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom)
+		};
+		Button minus_btn2 = new Button
+		{
+			Text = "-",
+			HorizontalOptions = LayoutOptions.End,
+			VerticalOptions = LayoutOptions.End,
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom)
 		};
 		Label Lab = new Label
 		{
-			VerticalOptions = LayoutOptions.Start
+			VerticalOptions = LayoutOptions.Start,
+			FontSize = 16
 		};
 		Button back_btn = new Button
 		{
@@ -75,22 +103,74 @@ namespace TR.BIDSDispX.SampleView
 			Margin = new Thickness(5),
 		};
 
-		Needle needle_black_shadow = new Needle
+		Needle Needle1_shadow = new Needle
 		{
-			Margin = new Thickness(Needle_Padding + Shadow_DstX, Needle_Padding + Shadow_DstY, 0, 0),
+			Margin = new Thickness(Shadow_Dst),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
-			NeedleOpacity = Shadow_Opacity,
-			Radius = RadiusValue - Needle_Padding,
-			NeedleHeight = Needle_Height,
+			Opacity = Shadow_Opacity,
+			Radius = RadiusValue,
+			NeedleHeight = Needle1_Height,
+			NeedleWidth = Needle1_Width,
+			Circle_Padding = Needle_Padding,
+			Angle = MinValAngle,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
 		};
-		Needle needle_black = new Needle
+		Needle Needle1_main = new Needle
 		{
-			Margin = new Thickness(Needle_Padding, Needle_Padding, 0, 0),
+			Margin = new Thickness(0),
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.Start,
-			Radius = RadiusValue - Needle_Padding,
-			NeedleHeight = Needle_Height,
+			Radius = RadiusValue,
+			NeedleHeight = Needle1_Height,
+			NeedleWidth = Needle1_Width,
+			Circle_Padding = Needle_Padding,
+			NeedleColor = Needle1_Color,
+			Angle = MinValAngle,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
+		};
+
+		Needle Needle2_shadow = new Needle
+		{
+			Margin = new Thickness(Shadow_Dst),
+			HorizontalOptions = LayoutOptions.Start,
+			VerticalOptions = LayoutOptions.Start,
+			Opacity = Shadow_Opacity,
+			Radius = RadiusValue,
+			NeedleHeight = Needle2_Height,
+			NeedleWidth = Needle2_Width,
+			Circle_Padding = Needle_Padding,
+			Angle = MinValAngle,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
+		};
+		Needle Needle2_main = new Needle
+		{
+			Margin = new Thickness(0),
+			HorizontalOptions = LayoutOptions.Start,
+			VerticalOptions = LayoutOptions.Start,
+			Radius = RadiusValue,
+			NeedleHeight = Needle2_Height,
+			NeedleWidth = Needle2_Width,
+			Circle_Padding = Needle_Padding,
+			NeedleColor = Needle2_Color,
+			Angle = MinValAngle,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
 		};
 
 		ScaleMarksView SMV_L = new ScaleMarksView()
@@ -103,6 +183,11 @@ namespace TR.BIDSDispX.SampleView
 
 			MarkHeight = SMV_L_Height,
 			MarkWidth = SMV_L_Width,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
 		};
 
 		ScaleMarksView SMV_M = new ScaleMarksView()
@@ -115,6 +200,11 @@ namespace TR.BIDSDispX.SampleView
 
 			MarkHeight = SMV_M_Height,
 			MarkWidth = SMV_M_Width,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
 		};
 
 		ScaleMarksView SMV_S = new ScaleMarksView()
@@ -127,35 +217,92 @@ namespace TR.BIDSDispX.SampleView
 
 			MarkHeight = SMV_S_Height,
 			MarkWidth = SMV_S_Width,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
 		};
 
-		ScaleLabelView ScaleLabel = new ScaleLabelView
+		ScaleLabelView ScaleLabel_Shadow = new ScaleLabelView
 		{
-			Margin = new Thickness(Label_Padding),
-			Radius = RadiusValue - Label_Padding,
+			Margin = new Thickness(Shadow_Dst, Shadow_Dst, -Shadow_Dst, -Shadow_Dst),
+			Radius = RadiusValue,
+			Opacity = Shadow_Opacity,
 
 			LabelStep = SMV_L_Step,
 			TextColor = Color.Black,
 			FontFamily = Label_FontFamily,
 			FontSize = Label_FontSize,
-			FontAttributes = Label_FontAtt
+			FontAttributes = Label_FontAtt,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
+
+			Circle_Padding = Label_Padding,
+		};
+		ScaleLabelView ScaleLabel = new ScaleLabelView
+		{
+			Margin = new Thickness(0),
+			Radius = RadiusValue,
+
+			LabelStep = SMV_L_Step,
+			TextColor = Color.Black,
+			FontFamily = Label_FontFamily,
+			FontSize = Label_FontSize,
+			FontAttributes = Label_FontAtt,
+
+			MaxValAngle = MaxValAngle,
+			MinValAngle = MinValAngle,
+			MaxValue = MaxValue,
+			MinValue = MinValue,
+
+			Circle_Padding = Label_Padding,
 		};
 
 
-		double __ValueToShow_Black = 0;
-		double ValueToShow_Black
+		double __ValueToShow_Needle1 = 0;
+		double ValueToShow_Needle1
 		{
-			get => __ValueToShow_Black;
+			get => __ValueToShow_Needle1;
 			set
 			{
-				if (value == __ValueToShow_Black)
+				if (value == __ValueToShow_Needle1)
 					return;
 
-				needle_black_shadow.ValueToShow = needle_black.ValueToShow = value;
-				Lab.Text = new StringBuilder().Append("ValueToShow:").Append(value).Append("\nAngle:").Append(needle_black.Angle).ToString();
-				__ValueToShow_Black = value;
+				Needle1_shadow.ValueToShow = Needle1_main.ValueToShow = value;
+				
+				__ValueToShow_Needle1 = value;
+				Lab_Update();
 			}
 		}
+
+		double __ValueToShow_Needle2 = 0;
+		double ValueToShow_Needle2
+		{
+			get => __ValueToShow_Needle2;
+			set
+			{
+				if (value == __ValueToShow_Needle2)
+					return;
+
+				Needle2_shadow.ValueToShow = Needle2_main.ValueToShow = value;
+				
+				__ValueToShow_Needle2 = value;
+				Lab_Update();
+			}
+		}
+
+		void Lab_Update() => Lab.Text = new StringBuilder()
+					.Append("# Needle1 (Black)").Append("\n")
+					.Append("    ValueToShow:").Append(Needle1_main.ValueToShow).Append("\n")
+					.Append("    Angle:").Append(Needle1_main.Angle).Append("\n")
+					.Append("# Needle2 (Red)").Append("\n")
+					.Append("    ValueToShow:").Append(Needle2_main.ValueToShow).Append("\n")
+					.Append("    Angle:").Append(Needle2_main.Angle)
+					.ToString();
 
 		public MeterView()
 		{
@@ -172,14 +319,19 @@ namespace TR.BIDSDispX.SampleView
 							SMV_S,
 							SMV_M,
 							SMV_L,
+							ScaleLabel_Shadow,
 							ScaleLabel,
-							needle_black_shadow,
-							needle_black,
+							Needle2_shadow,
+							Needle2_main,
+							Needle1_shadow,
+							Needle1_main,
 						}
 					},
 					Lab,
 					plus_btn,
 					minus_btn,
+					plus_btn2,
+					minus_btn2,
 					back_btn,
 					open_settingView_btn,
 					settingView,
@@ -192,8 +344,10 @@ namespace TR.BIDSDispX.SampleView
 
 			settingView.ChangeOptsAccepted += SettingView_ChangeOptsAccepted;
 
-			plus_btn.Clicked += (s, e) => ValueToShow_Black += 5;
-			minus_btn.Clicked += (s, e) => ValueToShow_Black -= 5;
+			plus_btn.Clicked += (s, e) => ValueToShow_Needle1 += PlusMinus_Step;
+			minus_btn.Clicked += (s, e) => ValueToShow_Needle1 -= PlusMinus_Step;
+			plus_btn2.Clicked += (s, e) => ValueToShow_Needle2 += PlusMinus_Step;
+			minus_btn2.Clicked += (s, e) => ValueToShow_Needle2 -= PlusMinus_Step;
 
 
 			SizeChanged += MeterView_SizeChanged;
@@ -202,8 +356,10 @@ namespace TR.BIDSDispX.SampleView
 				SMV_L.PropUpdated();
 				SMV_M.PropUpdated();
 				SMV_S.PropUpdated();
-				needle_black_shadow.PropUpdated();
-				needle_black.PropUpdated();
+				Needle1_shadow.PropUpdated();
+				Needle1_main.PropUpdated();
+				Needle2_shadow.PropUpdated();
+				Needle2_main.PropUpdated();
 			};
 		}
 
