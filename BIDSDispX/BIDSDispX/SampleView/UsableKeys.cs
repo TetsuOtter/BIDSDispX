@@ -6,7 +6,7 @@ namespace TR.BIDSDispX.SampleView
 {
 	static public class UsableKeys
 	{
-		enum Keys
+		public enum Keys
 		{
 			Zero,
 			kmph,
