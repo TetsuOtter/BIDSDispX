@@ -42,7 +42,8 @@ namespace TR.BIDSDispX
 
 		private void FindDlls()
 		{
-			SVClas.Msg = string.Empty;
+			SVClas.Msg = "FindDlls is Not Enabled.";
+			/*
 			List<string> fnames = new List<string>();
 
 			var mlsl = OSync.FileReadList();
@@ -52,6 +53,7 @@ namespace TR.BIDSDispX
 
 			if (!(fnames?.Count > 0)) SVClas.Dlls = new string[] { "There are no dlls in ↓", FDPath };
 			else SVClas.Dlls = fnames?.ToArray();
+			*/
 		}
 
 		private void LoadLib(object sender, EventArgs e)
