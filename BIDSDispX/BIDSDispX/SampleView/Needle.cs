@@ -1,5 +1,8 @@
 ﻿
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -7,36 +10,107 @@ using Xamarin.Forms.Xaml;
 
 namespace TR.BIDSDispX.SampleView
 {
-	public class Needle : ContentView, IAngleAndValMinMax
+	public class Needle : ContentView, IAngleAndValMinMax, INotifyPropertyChanged
 	{
 		private Grid MainNeedle = new Grid
 		{
-			AnchorX = 1,
-			AnchorY = 0.5,
 			HeightRequest = 10,
 			WidthRequest = 100,
 			BackgroundColor = Color.Transparent,
 			HorizontalOptions = LayoutOptions.Start,
-			VerticalOptions = LayoutOptions.Start
+			VerticalOptions = LayoutOptions.Center,
 		};
-		ColorPropToBind CPTB = new ColorPropToBind();
+		
 		public Needle()
 		{
 			this.Content = MainNeedle;
 
+			AnchorX = 0.5;
+			AnchorY = 0.5;
+
 			PropUpdated();
 		}
 
-		public uint MoveTimeLength { get; set; } = 50;
-
-		public Color NeedleColor{ get => CPTB.Color_ToBind; set => CPTB.Color_ToBind = value; }
-		public double NeedleOpacity { get => MainNeedle.Opacity; set => MainNeedle.Opacity = value; }
-		public double MinValAngle { get; set; } = -30;//←・が0度 ↑が90度 ・→が180度
-		public double MinValue { get; set; } = 0;
-		public double MaxValAngle { get; set; } = 210;//←・が0度 ↑が90度 ・→が180度
-		public double MaxValue { get; set; } = 160;
-
+		#region Fields for Properties
+		private Color __NeedleColor = Color.Black;
+		private double __MinValAngle = -30;//←・が0度 ↑が90度 ・→が180度
+		private double __MinValue = 0;
+		private double __MaxValAngle = 210;//←・が0度 ↑が90度 ・→が180度
+		private double __MaxValue = 160;
 		double __ValueToShow = 0;
+		private double __Radius = 100;
+		private double __NeedleHeight = 10;
+		private int __Triangle_StepCount = 20;
+		private double __Triangle_Width = 10;
+		private double __Circle_Padding = 0;
+		#endregion
+
+		#region Properties
+		public Color NeedleColor
+		{
+			get => __NeedleColor;
+			set
+			{
+				if (__NeedleColor == value)
+					return;
+
+				__NeedleColor = value;
+				ToApplyChangesForChildrenInmainThread((i) => ((BoxView)MainNeedle.Children[i]).Color = value);
+			}
+		}
+
+		public double MinValAngle
+		{
+			get => __MinValAngle;
+			set
+			{
+				if (__MinValAngle == value)
+					return;
+
+				__MinValAngle = value;
+				AngleUpdate();
+			}
+		}
+
+		public double MinValue
+		{
+			get => __MinValue;
+			set
+			{
+				if (__MinValue == value)
+					return;
+
+				__MinValue = value;
+				AngleUpdate();
+			}
+		}
+		
+		public double MaxValAngle
+		{
+			get => __MaxValAngle;
+			set
+			{
+				if (__MaxValAngle == value)
+					return;
+
+				__MaxValAngle = value;
+				AngleUpdate();
+			}
+		}
+
+		public double MaxValue
+		{
+			get => __MaxValue;
+			set
+			{
+				if (__MaxValue == value)
+					return;
+
+				__MaxValue = value;
+				AngleUpdate();
+			}
+		}
+
 		public double ValueToShow
 		{
 			get => __ValueToShow;
@@ -45,12 +119,11 @@ namespace TR.BIDSDispX.SampleView
 				if (__ValueToShow == value)
 					return;
 
-				Angle = value.GetAngle(this);
-				
 				__ValueToShow = value;
+				AngleUpdate();
 			}
 		}
-		private double __Radius = 100;
+		
 		public double Radius
 		{
 			get => __Radius;
@@ -59,62 +132,71 @@ namespace TR.BIDSDispX.SampleView
 				if (__Radius == value)
 					return;
 
-				MainNeedle.WidthRequest =__Radius = value;
-				PropUpdated();
+				__Radius = value;
+				MainThread.BeginInvokeOnMainThread(() => { HeightRequest = WidthRequest = value * 2; });
 			}
 		}
+
 		public double NeedleHeight
 		{
-			get => MainNeedle.Height;
+			get => __NeedleHeight;
 			set
 			{
-				MainNeedle.HeightRequest = value;
-				PropUpdated();
-			}
-		}
-
-		double __Angle = 0;
-		public double Angle
-		{
-			get => __Angle;
-			set
-			{
-				if (__Angle == value)
+				if (__NeedleHeight == value)
 					return;
 
-				MainThread.BeginInvokeOnMainThread(() => MainNeedle.Rotation = value);
-
-				__Angle = value;
+				__NeedleHeight = value;
+				MainThread.BeginInvokeOnMainThread(() => MainNeedle.HeightRequest = value);
+				PropUpdated();//描画のやり直し
 			}
 		}
 
-		private int __Triangle_StepCount = 20;
+
 		public int Triangle_StepCount
 		{
 			get => __Triangle_StepCount;
 			set
 			{
-				if (__Triangle_StepCount != value)
-				{
-					__Triangle_StepCount = value;
-					PropUpdated();
-				}
+				if (__Triangle_StepCount == value)
+					return;
+
+				__Triangle_StepCount = value;
+				PropUpdated();//描画のやり直し
 			}
 		}
 
-		private double __Triangle_Width = 10;
 		public double Triangle_Width
 		{
 			get => __Triangle_Width;
 			set
 			{
-				if (__Triangle_Width != value)
-				{
-					__Triangle_Width = value;
-					PropUpdated();
-				}
+				if (__Triangle_Width == value)
+					return;
+
+				__Triangle_Width = value;				
+				PropUpdated();//描画のやり直し
 			}
 		}
+
+		public double Circle_Padding
+		{
+			get => __Circle_Padding;
+			set
+			{
+				if (__Circle_Padding == value)
+					return;
+
+				__Circle_Padding = value;
+				MainThread.BeginInvokeOnMainThread(() => MainNeedle.Margin = new Thickness(Circle_Padding));
+			}
+		}
+
+		#region Direct Attatch Properties
+		public double NeedleWidth { get => MainNeedle.Width; set => MainThread.BeginInvokeOnMainThread(() => { MainNeedle.WidthRequest = value; }); }
+		public double Angle { get => Rotation; set => MainThread.BeginInvokeOnMainThread(() => Rotation = value); }//針だけじゃなく, ベースごと回転させる.
+		#endregion
+		#endregion
+
 
 		/// <summary>PropUpdatedの処理が重複して呼ばれていないかをチェック</summary>
 		private bool PropUpdateAlreadyRequested = false;
@@ -125,62 +207,38 @@ namespace TR.BIDSDispX.SampleView
 
 			PropUpdateAlreadyRequested = true;
 
-			Dispatcher.BeginInvokeOnMainThread(()=>
+			Dispatcher.BeginInvokeOnMainThread(() =>
 			{
-				MainNeedle.Margin = new Thickness(0, Radius - (NeedleHeight / 2), 0, 0);
-
 				MainNeedle.Children.Clear();
 
 				double CurrentTriMarginY = NeedleHeight / 2;
 				double dH = CurrentTriMarginY / Triangle_StepCount;
 
-				for (double i = 0; i < Triangle_Width; i += (Triangle_Width / Triangle_StepCount))
-				{
-					CurrentTriMarginY -= dH;
+				CurrentTriMarginY -= dH;//初回の処理用
 
-					BoxView BV = new BoxView
+				for (double i = 0; i < Triangle_Width; i += (Triangle_Width / Triangle_StepCount), CurrentTriMarginY -= dH)
+					MainNeedle.Children.Add(new BoxView
 					{
-						Margin = new Thickness(i, CurrentTriMarginY),
-						HorizontalOptions = LayoutOptions.Start,
-						VerticalOptions = LayoutOptions.Center,
-						WidthRequest = Triangle_Width / Triangle_StepCount,
-					};
-					BV.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
-					MainNeedle.Children.Add(BV);
-				}
-
-				BoxView BV_Main = new BoxView
-				{
-					Margin = new Thickness(Triangle_Width, 0, 0, 0),
-					HorizontalOptions = LayoutOptions.Start,
-					VerticalOptions = LayoutOptions.Center,
-					WidthRequest = Radius - Triangle_Width
-				};
-				BV_Main.SetBinding(BoxView.ColorProperty, new Binding(nameof(CPTB.Color_ToBind), source: CPTB));
-				MainNeedle.Children.Add(BV_Main);
+						Margin = new Thickness(i, CurrentTriMarginY,0,CurrentTriMarginY),
+						HorizontalOptions = LayoutOptions.FillAndExpand,
+						VerticalOptions = LayoutOptions.FillAndExpand,
+						
+						Color = NeedleColor
+					});
 
 				PropUpdateAlreadyRequested = false;
 			});
 		}
 
-		private class ColorPropToBind : INotifyPropertyChanged
-		{
-			Color __Color_ToBind = Color.Black;
-			public Color Color_ToBind
-			{
-				get => __Color_ToBind;
-				set
-				{
-					if (value != __Color_ToBind)
-					{
-						__Color_ToBind = value;
-						OnPropertyChanged(nameof(Color_ToBind));
-					}
-				}
-			}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private void AngleUpdate() => Angle = ValueToShow.GetAngle(this);
 
-			public event PropertyChangedEventHandler PropertyChanged;
-			protected void OnPropertyChanged(string s) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(s));
-		}
+		private void ToApplyChangesForChildrenInmainThread(Action<int> act) =>
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				if (MainNeedle.Children?.Count > 0)
+					for (int i = 0; i < MainNeedle.Children.Count; i++)
+						act.Invoke(i);
+			});
 	}
 }
