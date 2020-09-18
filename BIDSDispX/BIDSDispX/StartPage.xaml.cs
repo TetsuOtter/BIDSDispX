@@ -19,7 +19,7 @@ namespace TR.BIDSDispX
 		{
 			InitializeComponent();
 			SVClas = new SetValue() { Speed = "Initial String" };
-			OSync = new OnlineSync();
+			//OSync = new OnlineSync();
 			FindDlls();
 
 			BindingContext = SVClas;
