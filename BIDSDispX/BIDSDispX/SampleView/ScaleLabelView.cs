@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+﻿
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -10,8 +10,21 @@ namespace TR.BIDSDispX.SampleView
 {
 	public class ScaleLabelView : Grid, IAngleAndValMinMax
 	{
-		#region Properties
+
+		#region Fields for Properties
 		private double __MaxValAngle = 210;
+		private double __MinValAngle = -30;
+		private double __MinValue = 0;
+		private double __MaxValue = 160;
+		private int __LabelStep = 10;
+		private Color __TextColor = Color.Black;
+		private double __Radius = 80;
+		private double __FontSize = 16;
+		private string __FontFamily = string.Empty;
+		private FontAttributes __FontAttributes = FontAttributes.None;
+		private double __Circle_Padding = 0;
+		#endregion
+		#region Properties
 		/// <summary>最大値をとるときの目盛の角度[deg]  ←:0, ↑:90, →:180</summary>
 		public double MaxValAngle
 		{
@@ -22,11 +35,10 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__MaxValAngle = value;
-				PropUpdated();
+				LabsAngleUpdated();
 			}
 		}
 
-		private double __MinValAngle = -30;
 		/// <summary>最小値をとるときの目盛の角度[deg]  ←:0, ↑:90, →:180</summary>
 		public double MinValAngle
 		{
@@ -37,11 +49,10 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__MinValAngle = value;
-				PropUpdated();
+				LabsAngleUpdated();
 			}
 		}
 
-		private double __MinValue = 0;
 		/// <summary>表示の最小値[km/h]</summary>
 		public double MinValue
 		{
@@ -56,7 +67,6 @@ namespace TR.BIDSDispX.SampleView
 			}
 		}
 
-		private double __MaxValue = 160;
 		/// <summary>表示の最大値[km/h]</summary>
 		public double MaxValue
 		{
@@ -71,7 +81,6 @@ namespace TR.BIDSDispX.SampleView
 			}
 		}
 
-		private int __LabelStep = 10;
 		/// <summary>文字を配置する間隔[km/h]</summary>
 		public int LabelStep
 		{
@@ -82,11 +91,10 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__LabelStep = value;
-				PropUpdated();
+				PropUpdated();//ラベル数が変わる可能性があるため再描画
 			}
 		}
 
-		private Color __TextColor = Color.Black;
 		/// <summary>目盛の色</summary>
 		public Color TextColor
 		{
@@ -97,11 +105,11 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__TextColor = value;
-				PropUpdated();
+				ToApplyChangesForChildrenInmainThread((i) => ((Label)(((ContentView)Children[i]).Content)).TextColor = value);
 			}
 		}
 
-		private double __Radius = 80;
+		/// <summary>使用する円領域の半径設定[dp]</summary>
 		public double Radius
 		{
 			get => __Radius;
@@ -111,13 +119,11 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__Radius = value;
-				HeightRequest = WidthRequest = __Radius * 2;
-
-				PropUpdated();
+				MainThread.BeginInvokeOnMainThread(() => HeightRequest = WidthRequest = value * 2);
 			}
 		}
 
-		private double __FontSize = 16;
+		/// <summary>フォントサイズ[たぶんdp]</summary>
 		public double FontSize
 		{
 			get => __FontSize;
@@ -127,11 +133,11 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__FontSize = value;
-				PropUpdated();
+				ToApplyChangesForChildrenInmainThread((i) => ((Label)(((ContentView)Children[i]).Content)).FontSize = value);
 			}
 		}
 
-		private string __FontFamily = string.Empty;
+		/// <summary>フォント(Emptyでデフォルトフォント)</summary>
 		public string FontFamily
 		{
 			get => __FontFamily;
@@ -141,11 +147,11 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__FontFamily = value;
-				PropUpdated();
+				ToApplyChangesForChildrenInmainThread((i) => ((Label)(((ContentView)Children[i]).Content)).FontFamily = value);
 			}
 		}
 
-		private FontAttributes __FontAttributes = FontAttributes.None;
+		/// <summary>文字のスタイル(なし, 太字, 斜体, 太字&斜体)</summary>
 		public FontAttributes FontAttributes
 		{
 			get => __FontAttributes;
@@ -155,16 +161,30 @@ namespace TR.BIDSDispX.SampleView
 					return;
 
 				__FontAttributes = value;
-				PropUpdated();
+				ToApplyChangesForChildrenInmainThread((i) => ((Label)(((ContentView)Children[i]).Content)).FontAttributes = value);
 			}
 		}
 
+		/// <summary>ScaleLabelViewに割り当てられたエリアと使用する円領域の間のすきまの大きさ</summary>
+		public double Circle_Padding
+		{
+			get => __Circle_Padding;
+			set
+			{
+				if (__Circle_Padding == value)
+					return;
+
+				__Circle_Padding = value;
+				ToApplyChangesForChildrenInmainThread((i) => Children[i].Margin = new Thickness(value));
+			}
+		}
+
+		public double Circle_Radius => Radius - Circle_Padding;
 		#endregion
 
-		public ScaleLabelView()
-		{
-			PropUpdated();
-		}
+		public ScaleLabelView() => PropUpdated();
+		
+
 
 		private bool PropUpdateAlreadyRequested = false;
 		public void PropUpdated()
@@ -181,37 +201,27 @@ namespace TR.BIDSDispX.SampleView
 				for (int i = (int)MinValue; i <= MaxValue; i += LabelStep)
 				{
 					double angle = ((double)i).GetAngle(this);
-					ContentView v = new ContentView
+					Children.Add(new ContentView
 					{
 						Content = new Label
 						{
-							HorizontalOptions = LayoutOptions.Center,
-							VerticalOptions = LayoutOptions.Center,
+							HorizontalOptions = LayoutOptions.Start,//左端
+							VerticalOptions = LayoutOptions.Center,//上下方向に中央
 							AnchorX = 0.5,
 							AnchorY = 0.5,
-							TextColor = this.TextColor,
-							FontSize = this.FontSize,
-							FontFamily = this.FontFamily,
-							FontAttributes = this.FontAttributes,
 							Rotation = -angle,
-							Text = i.ToString()
+							Text = i.ToString(),
+							TextColor = TextColor,
+							FontSize = FontSize,
+							FontFamily = FontFamily,
+							FontAttributes = FontAttributes,
 						},
-
+						AnchorX = 0.5,
 						AnchorY = 0.5,
 						BackgroundColor = Color.Transparent,
-						HorizontalOptions = LayoutOptions.Start,
-						VerticalOptions = LayoutOptions.Start,
-						Rotation = angle
-					};
-					v.SizeChanged += (s, e) =>
-					{
-						ContentView cv = s as ContentView;
-
-						cv.Margin = new Thickness(0, Radius - (cv.Height / 2), 0, 0);
-						cv.AnchorX = Radius / cv.Width;
-					};
-
-					this.Children.Add(v);
+						Rotation = angle,
+						Margin = new Thickness(Circle_Padding),
+					});
 				}
 
 				PropUpdateAlreadyRequested = false;//処理完了済を記録
@@ -219,5 +229,35 @@ namespace TR.BIDSDispX.SampleView
 
 		}
 
+
+		private bool LabsAngleUpdatedAlreadyRequested = false;
+		private void LabsAngleUpdated()
+		{
+			if (PropUpdateAlreadyRequested || LabsAngleUpdatedAlreadyRequested)
+				return;
+
+			LabsAngleUpdatedAlreadyRequested = true;
+
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				if (PropUpdateAlreadyRequested)
+					return;
+
+				for (int i = 0; i < Children.Count; i++)
+				{
+					double angle = (MinValue + (i * LabelStep)).GetAngle(this);
+					((ContentView)Children[i]).Content.Rotation = -angle;
+					Children[i].Rotation = angle;
+				}
+			});
+		}
+
+		private void ToApplyChangesForChildrenInmainThread(Action<int> act) =>
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				if (Children?.Count > 0)
+					for (int i = 0; i < Children.Count; i++)
+						act.Invoke(i);
+			});
 	}
 }
