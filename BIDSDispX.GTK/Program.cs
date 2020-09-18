@@ -1,16 +1,13 @@
 ﻿using GLib;
-using Gtk;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.GTK;
 
 namespace TR.BIDSDispX.GTK
 {
-  class Program
+	class Program
   {
     [STAThread]
     static void Main(string[] args)
@@ -19,6 +16,10 @@ namespace TR.BIDSDispX.GTK
 
       GtkOpenGL.Init();
       GtkThemes.Init();
+
+      Forms.SetFlags("Shapes_Experimental");
+      
+
       Gtk.Application.Init();
       Forms.Init();
       var app = new App();
