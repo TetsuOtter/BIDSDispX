@@ -18,11 +18,18 @@ namespace TR.BIDSDispX.SampleView
 		static readonly double MarginY = 0;
 		static readonly double Shadow_Dst = RadiusValue / 128;
 		static readonly double Shadow_Opacity = 0.5;
+
 		static readonly double Needle_Padding = RadiusValue / 16;
 		static readonly double Needle1_Height = 0.8 * RadiusValue / 16;
 		static readonly double Needle2_Height = RadiusValue / 16;
 		static readonly double Needle1_Width = RadiusValue * 1.1;
 		static readonly double Needle2_Width = RadiusValue * 1.15;
+		static readonly Color Needle1_Color = Color.Black;
+		static readonly Color Needle2_Color = Color.Red;
+		static readonly double Needle1_TriangleWidth = RadiusValue;
+		static readonly double Needle2_TriangleWidth = RadiusValue;
+		static readonly int Needle1_TriangleStepCount = (int)(Needle1_TriangleWidth * 1.5);
+		static readonly int Needle2_TriangleStepCount = (int)(Needle2_TriangleWidth * 1.5);
 
 		static readonly double SMV_L_Height = RadiusValue / 32;
 		static readonly double SMV_M_Height = RadiusValue / 64;
@@ -30,25 +37,28 @@ namespace TR.BIDSDispX.SampleView
 		static readonly double SMV_L_Width = RadiusValue / 8;
 		static readonly double SMV_M_Width = RadiusValue / 8;
 		static readonly double SMV_S_Width = RadiusValue / 16;
-		static readonly double MaxValue = 1000;
-		static readonly double MinValue = 0;
-		static readonly double MaxValAngle = 225;
-		static readonly double MinValAngle = -45;
 		static readonly int SMV_L_Step = 200;
 		static readonly int SMV_M_Step = 50;
 		static readonly int SMV_S_Step = 10;
 		static readonly Color SMV_L_Color = Color.Red;
 		static readonly Color SMV_M_Color = Color.Aqua;
 		static readonly Color SMV_S_Color = Color.Black;
-		static readonly Color Needle1_Color = Color.Black;
-		static readonly Color Needle2_Color = Color.Red;
+
+		static readonly double MaxValue = 1000;
+		static readonly double MinValue = 0;
+		static readonly double MaxValAngle = 225;
+		static readonly double MinValAngle = -45;
+
 		static readonly double Label_Padding = RadiusValue / 6.5;
 		static readonly double Label_FontSize = RadiusValue / 6;
-		static readonly string Label_FontFamily = string.Empty;//"IPA_Gothic";
+		static readonly string Label_FontFamily = "IPA_Gothic";
 		static readonly FontAttributes Label_FontAtt = FontAttributes.Bold | FontAttributes.Italic;
+
 		static readonly double PlusMinusBtn_MarginLR = 80;
 		static readonly double PlusMinusBtn1_MarginBottom = 100;
 		static readonly double PlusMinusBtn2_MarginBottom = 50;
+		static readonly double PlusMinusBtn_Height = 40;
+		static readonly double PlusMinusBtn_Width = (DispCom.WindowWidth - (PlusMinusBtn_MarginLR * 2)) / 3;
 		static readonly int PlusMinus_Step = 20;
 
 		Button plus_btn = new Button
@@ -56,28 +66,36 @@ namespace TR.BIDSDispX.SampleView
 			Text = "+",
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom),
+			HeightRequest = PlusMinusBtn_Height,
+			WidthRequest = PlusMinusBtn_Width,
 		};
 		Button minus_btn = new Button
 		{
 			Text = "-",
 			HorizontalOptions = LayoutOptions.End,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn1_MarginBottom),
+			HeightRequest = PlusMinusBtn_Height,
+			WidthRequest = PlusMinusBtn_Width,
 		};
 		Button plus_btn2 = new Button
 		{
 			Text = "+",
 			HorizontalOptions = LayoutOptions.Start,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom),
+			HeightRequest = PlusMinusBtn_Height,
+			WidthRequest = PlusMinusBtn_Width,
 		};
 		Button minus_btn2 = new Button
 		{
 			Text = "-",
 			HorizontalOptions = LayoutOptions.End,
 			VerticalOptions = LayoutOptions.End,
-			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom)
+			Margin = new Thickness(PlusMinusBtn_MarginLR, 0, PlusMinusBtn_MarginLR, PlusMinusBtn2_MarginBottom),
+			HeightRequest = PlusMinusBtn_Height,
+			WidthRequest = PlusMinusBtn_Width,
 		};
 		Label Lab = new Label
 		{
@@ -120,6 +138,9 @@ namespace TR.BIDSDispX.SampleView
 			MinValAngle = MinValAngle,
 			MaxValue = MaxValue,
 			MinValue = MinValue,
+
+			Triangle_StepCount = Needle1_TriangleStepCount,
+			Triangle_Width = Needle1_TriangleWidth,
 		};
 		Needle Needle1_main = new Needle
 		{
@@ -137,6 +158,9 @@ namespace TR.BIDSDispX.SampleView
 			MinValAngle = MinValAngle,
 			MaxValue = MaxValue,
 			MinValue = MinValue,
+
+			Triangle_StepCount = Needle1_TriangleStepCount,
+			Triangle_Width = Needle1_TriangleWidth,
 		};
 
 		Needle Needle2_shadow = new Needle
@@ -155,6 +179,9 @@ namespace TR.BIDSDispX.SampleView
 			MinValAngle = MinValAngle,
 			MaxValue = MaxValue,
 			MinValue = MinValue,
+
+			Triangle_StepCount = Needle2_TriangleStepCount,
+			Triangle_Width = Needle2_TriangleWidth,
 		};
 		Needle Needle2_main = new Needle
 		{
@@ -172,6 +199,9 @@ namespace TR.BIDSDispX.SampleView
 			MinValAngle = MinValAngle,
 			MaxValue = MaxValue,
 			MinValue = MinValue,
+
+			Triangle_StepCount = Needle2_TriangleStepCount,
+			Triangle_Width = Needle2_TriangleWidth,
 		};
 
 		ScaleMarksView SMV_L = new ScaleMarksView()
