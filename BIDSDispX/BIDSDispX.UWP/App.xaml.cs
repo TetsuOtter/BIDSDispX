@@ -1,17 +1,14 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Xamarin.Forms;
 
 namespace TR.BIDSDispX.UWP
 {
   /// <summary>
   /// Provides application-specific behavior to supplement the default Application class.
   /// </summary>
-  sealed partial class App : Application
+  sealed partial class App : Windows.UI.Xaml.Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -32,14 +29,14 @@ namespace TR.BIDSDispX.UWP
         {
 
 
-            Frame rootFrame = Window.Current.Content as Frame;
+      Windows.UI.Xaml.Controls.Frame rootFrame = Windows.UI.Xaml.Window.Current.Content as Windows.UI.Xaml.Controls.Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+                rootFrame = new Windows.UI.Xaml.Controls.Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
         Xamarin.Forms.Forms.SetFlags("Shapes_Experimental");
@@ -50,8 +47,8 @@ namespace TR.BIDSDispX.UWP
                     //TODO: Load state from previously suspended application
                 }
 
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+				// Place the frame in the current Window
+				Windows.UI.Xaml.Window.Current.Content = rootFrame;
             }
 
             if (rootFrame.Content == null)
@@ -61,8 +58,8 @@ namespace TR.BIDSDispX.UWP
                 // parameter
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
-            // Ensure the current window is active
-            Window.Current.Activate();
+      // Ensure the current window is active
+      Windows.UI.Xaml.Window.Current.Activate();
         }
 
         /// <summary>
